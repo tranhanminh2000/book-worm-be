@@ -1,0 +1,76 @@
+@import "../../scss/variables";
+
+.home {
+  .container.on-sale {
+    .on-sale-header {
+      margin: 10px 0 10px;
+      display: flex;
+      justify-content: space-between;
+      .title {
+      }
+      .btn {
+      }
+    }
+    .on-sale-content {
+      background: white;
+      .slider {
+        height: 500px;
+        padding: 10px 0 10px;
+        #carouselExampleControlsNoTouching {
+          height: 100%;
+          .carousel-inner {
+            margin: auto;
+            width: 90%;
+            height: 100%;
+            .carousel-item {
+              height: 100%;
+              img {
+                height: 100%;
+              }
+            }
+          }
+          .carousel-control-prev,
+          .carousel-control-next {
+            width: 5%;
+            span {
+              background-color: $secondary-color;
+              padding: 10px;
+              border-radius: $border-radius;
+              width: 30px;
+              height: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .container.feature {
+    margin-top: 20px;
+    .feature-header {
+      margin-bottom: 20px;
+      .title {
+        text-align: center;
+      }
+      .options {
+        text-align: center;
+        .btn.active {
+          background: $primary-color;
+          color: white;
+          font-weight: 500;
+        }
+      }
+    }
+    .feature-content {
+      background: white;
+      .products-list {
+        width: 90%;
+        margin: auto;
+        .row {
+          .product-list-item {
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}

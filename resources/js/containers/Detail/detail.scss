@@ -1,0 +1,159 @@
+@import "../../scss/variables";
+
+.detail {
+  .container {
+    .title {
+      padding: 10px 0 10px;
+    }
+    .section-book-detail {
+      .row {
+        .col-12.col-sm-8 {
+          .content-detail {
+            padding: 20px;
+            background: white;
+            border-radius: $border-radius;
+            overflow: hidden;
+            .row.wrapper {
+              .col-4.left {
+                img {
+                  width: 100%;
+                  height: 200px;
+                }
+                .author {
+                  .author-name {
+                    display: inline-block;
+                    float: right;
+                  }
+                }
+              }
+              .col-8.right {
+                .book-name {
+                }
+                .book-description {
+                }
+              }
+            }
+          }
+        }
+        .col-12.col-sm-4 {
+          .price-detail {
+            overflow: hidden;
+            background: white;
+            border-radius: $border-radius;
+            .price {
+              background: $primary-color;
+              padding: 10px;
+              .discount {
+                text-decoration: line-through;
+              }
+              .current {
+                font-size: 20px;
+                font-weight: bold;
+              }
+            }
+            .quantity {
+              padding: 10px;
+
+              .control {
+                margin: auto;
+                width: 50%;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                text-transform: uppercase;
+                color: white;
+                font-size: 20px;
+                font-weight: 700;
+                background: $primary-color;
+                .minus {
+                  cursor: pointer;
+                }
+                .number {
+                }
+                .plus {
+                  cursor: pointer;
+                }
+              }
+              .add-to-cart {
+                display: block;
+                margin: auto;
+                width: 50%;
+                margin-top: 20px;
+                text-transform: uppercase;
+                color: white;
+                background: $primary-color;
+              }
+            }
+          }
+        }
+      }
+    }
+    .section-book-review {
+      margin-top: 20px;
+      .row {
+        .col-12.col-sm-8 {
+          .customer-review {
+            background: white;
+            padding: 20px;
+            .title {
+            }
+            .data-star {
+              .star-average {
+                font-weight: bold;
+                font-size: 30px;
+              }
+              .all-star {
+              }
+            }
+            .utilities {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              .showing-review {
+                margin: 0;
+                padding: 0;
+              }
+              .button-group {
+                .sort {
+
+                }
+                .show {
+                }
+              }
+            }
+            .comment-review {
+              list-style: none;
+              margin: 20px 0 0;
+              padding: 0;
+              .comment-review-item {
+                border-bottom: 1px solid $primary-color;
+                .comment-review-title {
+                }
+                .comment-review-content {
+                }
+                .comment-review-time {
+                }
+              }
+            }
+            .paginate {
+              margin-top: 20px;
+            }
+          }
+        }
+        .col-12.col-sm-4 {
+          .write-review {
+            background: white;
+            border-radius: $border-radius;
+            padding: 20px;
+            .title {
+            }
+            form.form-review {
+              .submit-review {
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

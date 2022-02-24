@@ -1,0 +1,112 @@
+@import "../../scss/variables";
+
+.bwm-header {
+  z-index: 10;
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  .navbar {
+    box-shadow: $box-shadow;
+    .container {
+      .collapse {
+        position: relative;
+        justify-content: space-between;
+        .navbar-brand.logo {
+          display: flex;
+          .image-wrapper {
+            display: inline-block;
+            height: 70px;
+            width: 150px;
+            img {
+              height: 100%;
+              width: 100%;
+              object-fit: contain;
+            }
+          }
+          .logo-text {
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+            color: $primary-color;
+            .worm{
+              color: $secondary-color;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .navbar-nav {
+          .nav-item {
+            .nav-link {
+              width: 70px;
+              text-align: center;
+              position: relative;
+              transition: all 0.5s ease !important;
+              &:hover {
+                font-weight: 600;
+              }
+
+              &:hover::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                height: 3px;
+                transform: translateX(-50%);
+                width: 100%;
+                background-color: $primary-color;
+              }
+
+              &::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                height: 3px;
+                transform: translateX(-50%);
+                width: 0%;
+                transition: all 0.5s ease;
+              }
+
+              &.active {
+                color: $primary-color !important;
+                font-weight: 500;
+              }
+
+              &.active::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                height: 3px;
+                transform: translateX(-50%);
+                width: 100%;
+                background-color: $primary-color;
+              }
+            }
+          }
+        }
+
+        #sign-in {
+          display: inline-block;
+          padding: 10px 30px 10px;
+          border-radius: 30px;
+          background: white;
+          border: 1px solid $primary-color;
+          cursor: pointer;
+          text-transform: uppercase;
+          font-weight: 500;
+          color: $primary-color;
+
+          &:hover {
+            color: white;
+            background-color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+@import "../../scss/_variables.scss";
+
+.card.bwm-card {
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $box-shadow;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  img {
+    width: 100%;
+    height: 250px;
+  }
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .card-body-head {
+      .card-title {
+      }
+      .card-text {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        max-height: 6.2rem;
+      }
+    }
+    .card-body-foot {
+      .price {
+        .current {
+            font-size: 1.5rem;
+
+        }
+        .discount {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+      }
+      .button-group {
+        .add-to-card {
+          background: $primary-color;
+          border: none;
+        }
+        .detail {
+          background: $secondary-color;
+          border: none;
+          float: right;
+        }
+      }
+    }
+  }
+}

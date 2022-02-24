@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
-use App\Repositories\BookRepo;
+
+use App\Repositories\Book\BookRepository;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
+
 
 class BookController extends Controller
 {
+    public $bookRepository;
+
+    public function __construct(BookRepository $bookRepository){
+        $this->bookRepository = $bookRepository;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = BookRepo::selectAll();
-        return $books;
+//        return $request;
+        return $this->bookRepository->selectByCondition($request->all());
     }
 
     /**
@@ -28,7 +32,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        // null
     }
 
     /**
@@ -39,7 +43,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // null
     }
 
     /**
@@ -50,7 +54,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+         $book = $this->bookRepository->selectById($id);
+         return $book;
     }
 
     /**
@@ -87,9 +92,22 @@ class BookController extends Controller
         //
     }
 
-    public function getById($id){
-        $book = BookRepo::find($id);
 
-        return response()->json(['success' => true, 'data' => $book], 200);
+    public function getMostDiscount(Request $request){
+        $limit = $request->query('limit');
+
+        $books = $this->bookRepository->selectByMostDiscount($limit);
+        return $books;
+    }
+
+    public function getRecommended(Request $request){
+        return $request->query('limit');
+    }
+
+    public function getPopular(Request $request){
+        $limit = $request->query('limit');
+
+        $books = $this->bookRepository->selectByPopular($limit);
+        return $books;
     }
 }

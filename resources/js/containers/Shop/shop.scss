@@ -1,0 +1,88 @@
+@import "../../scss/variables";
+
+.shop {
+  .section-main {
+    .container {
+      .wrapper {
+        .title {
+          margin-bottom: 20px;
+          text-align: center;
+          text-transform: uppercase;
+        }
+      }
+      .row {
+        .filter-section {
+          .filter-heading {
+            height: 50px;
+            background: $primary-color;
+            padding: 10px;
+            border-radius: $border-radius;
+            margin-bottom: 20px;
+            color: white;
+          }
+          .filter-list {
+            background: white;
+            border-radius: $border-radius;
+            padding: 10px;
+            margin-bottom: 10px;
+            h5 {
+            }
+            ul {
+              list-style: none;
+              margin-left: 10px;
+              padding: 0;
+              li {
+                margin-top: 30px;
+                &.active {
+                  color: $secondary-color;
+                  font-weight: bold;
+                }
+              }
+            }
+          }
+        }
+
+        .books-section {
+          .utilities-bar {
+            display: flex;
+            height: 50px;
+            justify-content: space-between;
+            background: white;
+            border-radius: $border-radius;
+            padding: 10px;
+            p {
+            }
+            .button-group {
+              display: flex;
+              .dropdown {
+                .dropdown-toggle {
+                }
+                .dropdown-menu {
+                }
+              }
+            }
+          }
+
+          .product-list{
+
+            .product-list-item{
+              margin-top: 20px;
+            }
+          }
+
+          .row.pagination{
+            margin-top: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .filterQuery {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

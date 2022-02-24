@@ -1,0 +1,45 @@
+@import "../../scss/variables";
+
+#bwm-footer {
+  background: $primary-color;
+  color: white;
+  padding: 40px 0 40px;
+  .container {
+    .row {
+      .col-md-4 {
+        .logo {
+          display: flex;
+          text-decoration: none;
+          color: white;
+          .img-wrapper {
+            width: 100px;
+            height: 100px;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+
+          .text-wrapper {
+            display: flex;
+            flex-direction: column;
+            .logo-text {
+              text-align: center;
+              color: white;
+            }
+          }
+        }
+
+        .payment{
+          width: 100%;
+          height: 80px;
+          img{
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+      }
+    }
+  }
+}
