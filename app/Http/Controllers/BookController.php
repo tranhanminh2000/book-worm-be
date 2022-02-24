@@ -22,8 +22,13 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-//        return $request;
-        return $this->bookRepository->selectByCondition($request->all());
+        $limit  = $request->query("limit") != null ? $request->query("limit") : 5;
+        $sort   = $request->query("sort") != null ? $request->query("sort") : null;
+        $filter = $request->query("filter") != null ? $request->query("filter") : null;
+
+        $books = $this->bookRepository->selectByCondition($limit, $sort, $filter)->paginate($limit);
+        print_r(gettype($request->query('sort')['onsale']));
+//        return $books;
     }
 
     /**
@@ -93,12 +98,11 @@ class BookController extends Controller
         //
     }
 
-
     public function getMostDiscount(Request $request){
         $limit = $request->query('limit');
 
-        $books = $this->bookRepository->selectByMostDiscount($limit);
-        return $books;
+        $books = $this->bookRepository->selectByMostDiscount();
+        return $books->limit($limit)->get();
     }
 
     public function getRecommended(Request $request){

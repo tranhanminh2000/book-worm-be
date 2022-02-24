@@ -17,25 +17,47 @@ class BookRepository
         return Book::with('author', 'category')->find($id);
     }
 
-    public function selectByCondition(array $condition)
+    public function selectByCondition(int $limit, $sort , $filter)
     {
+        $sortBy = null;
+        $sortValue = null;
+        $filterBy = null;
+        $filterValue = null;
+        $result = null;
 
+        foreach ($sort as $key => $value){
+            $sortBy = $key;
+            $sortValue = $value;
+        }
+
+        foreach ($filter as $key => $value){
+            $filterBy = $key;
+            $filterValue = $value;
+        }
+
+        if(isset($sortBy) && $sortBy == "onsale"){
+            $result = $this->selectByMostDiscount();
+        } else if (isset($sortBy) && $sortBy == "popularity"){
+            $result = $this->selectByPopular();
+        }
+
+        return $result;
     }
 
-    public function selectByMostDiscount(int $limit)
+    public function selectByMostDiscount()
     {
-        $books = Book::select('book_title', 'book_summary', 'book_price', "book.book_price", "discount.discount_price")
+        $result = Book::select('book_title', 'book_summary', 'book_price', "discount_price as final_price")
             ->selectRaw('book_price - discount_price AS  most_discount')
             ->join("discount", "discount.book_id", '=', 'book.id')
             ->orderBy("most_discount", 'desc')
-            ->limit($limit)
-            ->get();
-        return $books;
+            ->orderBy("final_price", 'asc');
+
+        return $result;
     }
 
-    public function selectByPopular(int $limit)
+    public function selectByPopular()
     {
-        $books = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
+        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
             DB::raw(' CASE
             WHEN discount_price ISNULL THEN book.book_price
             ELSE discount_price
@@ -46,16 +68,15 @@ class BookRepository
             ->join("author", "author.id", '=', 'book.author_id')
             ->groupBy("book_title", 'book_summary', 'book_price', "final_price", 'author_name')
             ->orderBy("total_review", 'DESC')
-            ->orderBy("final_price", 'ASC')
-            ->limit($limit)
-            ->get();
-        return $books;
+            ->orderBy("final_price", 'ASC');
+
+        return $result;
 
     }
 
     public function selectByRecommended(int $limit)
     {
-        $books = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
+        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
             DB::raw(' CASE
             WHEN discount_price ISNULL THEN book.book_price
             ELSE discount_price
@@ -69,7 +90,8 @@ class BookRepository
             ->orderBy("final_price", 'ASC')
             ->limit($limit)
             ->get();
-        return $books;
+
+        return $result;
     }
 
     public function update($id)

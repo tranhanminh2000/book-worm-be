@@ -3,6 +3,9 @@ import Layout from "../../component/Layout/Layout.jsx";
 import "./home.scss";
 
 const Home = () => {
+
+
+
   return (
     <Layout>
       <div className="home">
