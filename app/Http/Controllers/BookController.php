@@ -14,6 +14,7 @@ class BookController extends Controller
     public function __construct(BookRepository $bookRepository){
         $this->bookRepository = $bookRepository;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -101,7 +102,10 @@ class BookController extends Controller
     }
 
     public function getRecommended(Request $request){
-        return $request->query('limit');
+        $limit = $request->query('limit');
+
+        $books = $this->bookRepository->selectByRecommended($limit);
+        return $books;
     }
 
     public function getPopular(Request $request){
