@@ -22,13 +22,13 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $limit  = $request->query("limit") != null ? $request->query("limit") : 5;
-        $sort   = $request->query("sort") != null ? $request->query("sort") : null;
-        $filter = $request->query("filter") != null ? $request->query("filter") : null;
+        $size  = $request->query("size");
+        $sort   = $request->query("sort");
+        $filter = $request->query("filter");
 
-        $books = $this->bookRepository->selectByCondition($limit, $sort, $filter)->paginate($limit);
-        print_r(gettype($request->query('sort')['onsale']));
-//        return $books;
+        $books = $this->bookRepository->selectByCondition($sort, $filter)->paginate($size);
+        return $books;
+
     }
 
     /**
@@ -99,23 +99,23 @@ class BookController extends Controller
     }
 
     public function getMostDiscount(Request $request){
-        $limit = $request->query('limit');
+        $size = $request->query('size');
 
         $books = $this->bookRepository->selectByMostDiscount();
-        return $books->limit($limit)->get();
+        return $books->limit($size)->get();
     }
 
     public function getRecommended(Request $request){
-        $limit = $request->query('limit');
+        $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByRecommended($limit);
-        return $books;
+        $books = $this->bookRepository->selectByRecommended();
+        return $books->limit($size)->get();
     }
 
     public function getPopular(Request $request){
-        $limit = $request->query('limit');
+        $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByPopular($limit);
+        $books = $this->bookRepository->selectByPopular()->limit($size)->get();
         return $books;
     }
 }

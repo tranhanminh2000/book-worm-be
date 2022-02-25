@@ -23,10 +23,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // books
 
-Route::get("v1/books/mostDiscount", [BookController::class, 'getMostDiscount']);
-Route::get("v1/books/recommended", [BookController::class, 'getRecommended']);
-Route::get("v1/books/popular", [BookController::class, 'getPopular']);
-Route::resource("v1/books", BookController::class);
+//Route::get("v1/books/mostDiscount", [BookController::class, 'getMostDiscount']);
+//Route::get("v1/books/recommended", [BookController::class, 'getRecommended']);
+//Route::get("v1/books/popular", [BookController::class, 'getPopular']);
+//Route::resource("v1/books", BookController::class);
+
+
+    Route::get("v1/books/mostDiscount", [BookController::class, 'getMostDiscount']);
+    Route::get("v1/books/recommended", [BookController::class, 'getRecommended']);
+    Route::get("v1/books/popular", [BookController::class, 'getPopular']);
+    Route::resource("v1/books", BookController::class);
+
 
 Route::resource("v1/reviews", ReviewController::class);
 

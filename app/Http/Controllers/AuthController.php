@@ -12,18 +12,18 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         try {
-            $request->validate([
-                'email' => 'email|required',
-                'password' => 'required'
-            ]);
+//            $request->validate([
+//                'email' => 'email|required',
+//                'password' => 'required'
+//            ]);
 
-            $credentials = request(['email', 'password']);
+//            $credentials = request(['email', 'password']);
 
             $user = User::where('email', $request->email)->first();
 
-            if (!Hash::check($request->password, $user->password, [])) {
-                throw new \Exception('Error in Login');
-            }
+//            if (!Hash::check($request->password, $user->password, [])) {
+//                throw new \Exception('Error in Login');
+//            }
 
             $tokenResult = $user->createToken('authToken')->plainTextToken;
 

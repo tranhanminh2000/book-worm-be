@@ -7,50 +7,77 @@ use Illuminate\Support\Facades\DB;
 
 class BookRepository
 {
-    public function selectAll()
-    {
-        // todo
-    }
-
     public function selectById($id)
     {
         return Book::with('author', 'category')->find($id);
     }
 
-    public function selectByCondition(int $limit, $sort , $filter)
+    public function selectByCondition($sort, $filter)
     {
         $sortBy = null;
         $sortValue = null;
         $filterBy = null;
         $filterValue = null;
-        $result = null;
+        $result = [];
 
-        foreach ($sort as $key => $value){
+        foreach ($sort as $key => $value) {
             $sortBy = $key;
             $sortValue = $value;
         }
 
-        foreach ($filter as $key => $value){
+        foreach ($filter as $key => $value) {
             $filterBy = $key;
             $filterValue = $value;
         }
 
-        if(isset($sortBy) && $sortBy == "onsale"){
-            $result = $this->selectByMostDiscount();
-        } else if (isset($sortBy) && $sortBy == "popularity"){
-            $result = $this->selectByPopular();
+        if (isset($sortBy) && $sortBy == "type") {
+            switch ($sortValue) {
+                case "onsale":
+                    if (isset($filterBy)) {
+                        $result = $this->selectByMostDiscount()->where($filterBy, $filterValue);
+                    } else {
+                        $result = $this->selectByMostDiscount();
+                    }
+                    break;
+                case "popularity":
+                    if (isset($filterBy)) {
+                        $result = $this->selectByPopular()->where($filterBy, $filterValue);
+                    } else {
+                        $result = $this->selectByPopular();
+                    }
+                    break;
+                case "desc":
+                    if (isset($filterBy)) {
+                        $result = $this->selectByOrder("desc")->where($filterBy, $filterValue);
+                    } else {
+                        $result = $this->selectByOrder("desc");
+                    }
+                    break;
+                case "asc":
+                    if (isset($filterBy)) {
+                        $result = $this->selectByOrder("asc")->where($filterBy, $filterValue);
+                    } else {
+                        $result = $this->selectByOrder("asc");
+                    }
+                    break;
+                default:
+                    return $result;
+            }
         }
-
         return $result;
+
     }
 
     public function selectByMostDiscount()
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', "discount_price as final_price")
+        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name', "discount_price")
             ->selectRaw('book_price - discount_price AS  most_discount')
             ->join("discount", "discount.book_id", '=', 'book.id')
+            ->leftJoin("author", "author.id", '=', 'book.author_id')
+            ->leftJoin("review", "review.book_id", '=', 'book.id')
+            ->leftJoin("category", "category.id", '=', 'book.category_id')
             ->orderBy("most_discount", 'desc')
-            ->orderBy("final_price", 'asc');
+            ->orderBy("discount_price", 'asc');
 
         return $result;
     }
@@ -58,39 +85,47 @@ class BookRepository
     public function selectByPopular()
     {
         $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
-            DB::raw(' CASE
-            WHEN discount_price ISNULL THEN book.book_price
-            ELSE discount_price
-            END AS final_price'),
+            'discount_price',
             DB::raw('COUNT(review.id) as total_review'))
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
-            ->join("author", "author.id", '=', 'book.author_id')
-            ->groupBy("book_title", 'book_summary', 'book_price', "final_price", 'author_name')
+            ->leftJoin("author", "author.id", '=', 'book.author_id')
+            ->leftJoin("category", "category.id", '=', 'book.category_id')
+            ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
             ->orderBy("total_review", 'DESC')
-            ->orderBy("final_price", 'ASC');
+            ->orderBy("discount_price", 'ASC')
+            ->orderBy("book_price", 'ASC');
 
         return $result;
 
     }
 
-    public function selectByRecommended(int $limit)
+    public function selectByRecommended()
     {
         $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
-            DB::raw(' CASE
-            WHEN discount_price ISNULL THEN book.book_price
-            ELSE discount_price
-            END AS final_price'),
+            'discount_price',
             DB::raw('AVG(review.rating_start) as avg_rating'))
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
             ->join("author", "author.id", '=', 'book.author_id')
-            ->groupBy("book_title", 'book_summary', 'book_price', "final_price", 'author_name')
+            ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
             ->orderBy("avg_rating", 'DESC')
-            ->orderBy("final_price", 'ASC')
-            ->limit($limit)
-            ->get();
+            ->orderBy("discount_price", 'ASC')
+            ->orderBy("book_price", 'ASC');
+        return $result;
+    }
 
+    public function selectByOrder(string $orderBy)
+    {
+        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
+            "discount_price")
+            ->distinct()
+            ->leftJoin("discount", "discount.book_id", '=', 'book.id')
+            ->leftJoin("review", "review.book_id", '=', 'book.id')
+            ->leftJoin("author", "author.id", '=', 'book.author_id')
+            ->leftJoin("category", "category.id", '=', 'book.category_id')
+            ->orderBy("discount_price", $orderBy)
+            ->orderBy("book_price", $orderBy);
         return $result;
     }
 
