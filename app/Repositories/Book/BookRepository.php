@@ -9,7 +9,9 @@ class BookRepository
 {
     public function selectById($id)
     {
-        return Book::with('author', 'category')->find($id);
+        $book = Book::with('author', 'category')->find($id);
+
+        return $book;
     }
 
     public function selectByCondition($sort, $filter)
@@ -34,28 +36,28 @@ class BookRepository
             switch ($sortValue) {
                 case "onsale":
                     if (isset($filterBy)) {
-                        $result = $this->selectByMostDiscount()->where($filterBy, $filterValue);
+                        $result = Book::filter($this->selectByMostDiscount(), $filterBy, $filterValue);
                     } else {
                         $result = $this->selectByMostDiscount();
                     }
                     break;
                 case "popularity":
                     if (isset($filterBy)) {
-                        $result = $this->selectByPopular()->where($filterBy, $filterValue);
+                        $result = Book::filter($this->selectByPopular(), $filterBy, $filterValue);
                     } else {
                         $result = $this->selectByPopular();
                     }
                     break;
                 case "desc":
                     if (isset($filterBy)) {
-                        $result = $this->selectByOrder("desc")->where($filterBy, $filterValue);
+                        $result = Book::filter($this->selectByOrder("desc"), $filterBy, $filterValue);
                     } else {
                         $result = $this->selectByOrder("desc");
                     }
                     break;
                 case "asc":
                     if (isset($filterBy)) {
-                        $result = $this->selectByOrder("asc")->where($filterBy, $filterValue);
+                        $result = Book::filter($this->selectByOrder("asc"), $filterBy, $filterValue);
                     } else {
                         $result = $this->selectByOrder("asc");
                     }
@@ -126,6 +128,8 @@ class BookRepository
             ->leftJoin("category", "category.id", '=', 'book.category_id')
             ->orderBy("discount_price", $orderBy)
             ->orderBy("book_price", $orderBy);
+
+
         return $result;
     }
 

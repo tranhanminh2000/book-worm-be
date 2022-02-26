@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class Book extends Model
@@ -13,27 +14,41 @@ class Book extends Model
     public $timestamps = false;
     protected $table = 'book';
 
-    public function author(){
+    public function author()
+    {
         return $this->belongsTo(Author::class);
     }
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
 
-    public function discount(){
+    public function discount()
+    {
         return $this->hasOne(Review::class);
     }
 
-    public function order_item(){
+    public function order_item()
+    {
         $this->hasMany(Order_items::class);
     }
 
-    public function scopeFilter($request, $key, $value){
-        return $request->where($key, '=', $value);
+    public function scopeFilter($query, $customQuery, $filterBy, $filterValue)
+    {
+        if ($filterBy == "rating_star") {
+            $customQuery->selectRaw("AVG(review.rating_start) as avg_rating")
+                ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
+                ->havingRaw("AVG(review.rating_start) >= ${filterValue}");
+
+        } else {
+            $customQuery->where($filterBy, $filterValue);
+        }
+        return $customQuery;
     }
 }
