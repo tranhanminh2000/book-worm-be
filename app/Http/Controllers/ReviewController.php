@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+
 use App\Models\Review;
-use App\Repositories\BookRepo;
+use App\Repositories\Review\ReviewRepository;
+
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
@@ -17,11 +17,32 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $reviews = Review::all();
+    public $reviewRepository;
 
-        return $reviews;
+    public function __construct(reviewRepository $reviewRepository){
+        $this->reviewRepository = $reviewRepository;
+    }
+
+
+    public function index(Request $request)
+    {
+        $size = $request->query('size');
+        $sort = $request->query('sort');
+        $filter = $request->query('filter');
+        $bookId = $request->query('bookId');
+
+        $reviews = $this->reviewRepository->selectByCondition($sort, $filter, $bookId)->paginate($size);
+        $avgStar = $this->reviewRepository->getAverageStar($bookId);
+        $listStarClassify = $this->reviewRepository->getListStarClassify($bookId);
+
+        return response()->json([
+            "success" => true,
+            "data" => [
+                "avg_star" => $avgStar[0]["avg_rating"],
+                "listStarClassify" => $listStarClassify,
+                "reviewsData" => $reviews
+            ]
+        ], 200);
     }
 
     /**
@@ -42,7 +63,36 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validator = Validator::make($request->all(), [
+            'bookId' => 'required',
+            'reviewTitle' => 'required',
+            'reviewDetails' => 'required',
+            'ratingStar' => 'required',
+        ]);
+
+        // Check validation failure
+        if ($validator->fails()) {
+            $result = response()->json([
+                "success" => false,
+                "message" => $validator->getMessageBag(),
+            ], 404);
+
+            return $result;
+        }
+
+        $bookId = $request->bookId;
+        $reviewTile = $request->reviewTitle;
+        $reviewDetails = $request->reviewDetails;
+        $ratingStar = $request->ratingStar;
+
+        $result = $this->reviewRepository->createNewReview($bookId, $reviewTile, $reviewDetails, $ratingStar);
+
+        return  response()->json([
+            "success" => true,
+            "newReview" => $result,
+        ], 200);;
+
     }
 
     /**
@@ -53,7 +103,7 @@ class ReviewController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -89,4 +139,6 @@ class ReviewController extends Controller
     {
         //
     }
+
+
 }

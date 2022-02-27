@@ -11,8 +11,26 @@ class Review extends Model
 
     public $timestamps = false;
     protected $table = 'review';
+    protected $fillable = ["review_date"];
+
 
     public function book(){
         return $this->belongsTo(Review::class);
+    }
+
+    public function scopeFindReviews ($query, $bookId){
+        $query->where("book_id", $bookId);
+        return $query;
+    }
+
+    public function scopeSort($query, $sortBy = "review_date", $sortValue  ="desc"){
+        $query->orderBy($sortBy, $sortValue);
+        return $query;
+    }
+
+    public function scopeFilter($query, $filterBy = "rating_start", $filterValue = "5"){
+
+        $query->where($filterBy, $filterValue);
+        return $query;
     }
 }
