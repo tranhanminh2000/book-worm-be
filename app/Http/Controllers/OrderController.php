@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Order\OrderRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -11,6 +13,12 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected OrderRepository $orderRepository;
+    public function __construct(OrderRepository $orderRepository)
+    {
+        $this->orderRepository = $orderRepository;
+    }
+
     public function index()
     {
         //
@@ -34,7 +42,29 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        return DB::table("order_item")->query();
+        $request->validate([
+            'userId' => 'required',
+            'orderAmount' => 'required|numeric',
+            'cart' => "required"
+        ]);
+
+        $userId = $request->userId;
+        $orderAmount = $request->orderAmount;
+        $cart = $request->cart;
+
+        $result = $this->orderRepository->createOrder($userId, $orderAmount, $cart);
+
+        if($result == 1){
+            return response()->json([
+                "success" => true,
+                "message" => "Order successfully"
+            ], 200);
+        } else {
+            return response()->json([
+                "success" => false,
+                "message" => "Order failed"
+            ], 400);
+        }
     }
 
     /**
