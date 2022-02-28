@@ -13,8 +13,7 @@ import Modal from "./component/Modal/Modal.jsx";
 import configStore from "./store/config.js";
 import { Provider } from "react-redux";
 import NotFound from "./containers/NotFound/NotFound.jsx";
-import Header from "./component/Header/Header.jsx";
-import axios from "axios";
+
 const store = configStore();
 
 

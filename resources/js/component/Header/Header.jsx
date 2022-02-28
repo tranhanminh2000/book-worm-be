@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { Link, useMatch } from "react-router-dom";
 import classNames from "classnames";
 import { NAV_LINK_LIST } from "../../constants/navLink.constant";
-const { APP_BASE_URL_PUBLIC } = process.env;
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -13,7 +12,7 @@ const Header = () => {
     dispatch(actions.showModal());
   };
 
-  const navListItem = ({ label, to, activeOnlyWhen }) => {
+  const navListItem = ({ label, to, activeOnlyWhen, icon }) => {
     const match = useMatch({
       path: to,
       exact: activeOnlyWhen,
@@ -26,7 +25,7 @@ const Header = () => {
           className={classNames("nav-link", { active: match })}
           aria-current="page"
         >
-          {label}
+          {icon}{label}
         </Link>
       </li>
     );
@@ -35,9 +34,9 @@ const Header = () => {
   const renderNavListItem = (navLinks) => {
     let xhtml = [];
     xhtml = navLinks.map((link) => {
-      const { label, path, exact } = link;
+      const { label, path, exact, icon } = link;
 
-      return navListItem({ label: label, to: path, activeOnlyWhen: exact });
+      return navListItem({ label: label, to: path, activeOnlyWhen: exact , icon:icon});
     });
 
     return xhtml;
@@ -63,7 +62,7 @@ const Header = () => {
             <Link to="/home" className="navbar-brand logo" href="#">
               <div className="image-wrapper">
                 <img
-                  src={APP_BASE_URL_PUBLIC + "bookcover/bookworm_icon.svg"}
+                  src={"/bookcover/bookworm_icon.svg"}
                   alt=""
                   className="d-inline-block align-text-top"
                 />

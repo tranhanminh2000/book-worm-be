@@ -18,9 +18,9 @@ const Footer = () => {
                 <p id="logo-text">Book store</p>
               </div>
             </a>
-            
+
             <div className="payment">
-              <img src="/payment.png" alt="" />
+              <img src="/bookcover/paymentt.jpg" alt="" />
             </div>
           </div>
 

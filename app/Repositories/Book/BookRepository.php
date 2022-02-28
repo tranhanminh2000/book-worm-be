@@ -72,7 +72,8 @@ class BookRepository
 
     public function selectByMostDiscount()
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name', "discount_price")
+        $result = Book::select('book_title', 'book_summary', 'book_price', 'book_cover_photo' ,'author_name', "discount_price")
+            ->distinct()
             ->selectRaw('book_price - discount_price AS  most_discount')
             ->join("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
