@@ -9,7 +9,7 @@ class BookRepository
 {
     public function selectById($id)
     {
-        $book = Book::with('author', 'category')->find($id);
+        $book = Book::with('author', 'category', 'discount')->find($id);
 
         return $book;
     }
@@ -67,14 +67,12 @@ class BookRepository
             }
         }
         return $result;
-
     }
 
     public function selectByMostDiscount()
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', 'book_cover_photo' ,'author_name', "discount_price")
+        $result = Book::select('book.id','book_title', 'book_summary', 'book_price', 'book_cover_photo', 'author_name', "discount_price", DB::raw("book_price - discount_price AS  most_discount"))
             ->distinct()
-            ->selectRaw('book_price - discount_price AS  most_discount')
             ->join("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
@@ -87,31 +85,44 @@ class BookRepository
 
     public function selectByPopular()
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
+        $result = Book::select(
+            'book.id',
+            'book_title',
+            'book_summary',
+            'book_price',
+            'book_cover_photo',
+            'author_name',
             'discount_price',
-            DB::raw('COUNT(review.id) as total_review'))
+            DB::raw('COUNT(review.id) as total_review')
+        )
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
-            ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
             ->orderBy("total_review", 'DESC')
             ->orderBy("discount_price", 'ASC')
             ->orderBy("book_price", 'ASC');
 
         return $result;
-
     }
 
     public function selectByRecommended()
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
+        $result = Book::select(
+            'book.id',
+            'book_title',
+            'book_summary',
+            'book_price',
+            'book_cover_photo',
+            'author_name',
             'discount_price',
-            DB::raw('AVG(review.rating_start) as avg_rating'))
+            DB::raw('AVG(review.rating_start) as avg_rating')
+        )
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
-            ->join("author", "author.id", '=', 'book.author_id')
-            ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
+            ->leftJoin("author", "author.id", '=', 'book.author_id')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
             ->orderBy("avg_rating", 'DESC')
             ->orderBy("discount_price", 'ASC')
             ->orderBy("book_price", 'ASC');
@@ -120,8 +131,14 @@ class BookRepository
 
     public function selectByOrder(string $orderBy)
     {
-        $result = Book::select('book_title', 'book_summary', 'book_price', 'author_name',
-            "discount_price")
+        $result = Book::select(
+            'book.id',
+            'book_title',
+            'book_summary',
+            'book_price',
+            'author_name',
+            "discount_price"
+        )
             ->distinct()
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')

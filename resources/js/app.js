@@ -16,30 +16,30 @@ import NotFound from "./containers/NotFound/NotFound.jsx";
 
 const store = configStore();
 
-
 function App() {
-
-
-  return (
-    <Provider store={store}>
-      <div className="app">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/">
-              <Route index element={<Navigate to="/home" />}></Route>
-              <Route path="home" element={<Home />}></Route>
-              <Route path="shop" element={<Shop />}></Route>
-              <Route path="cart" element={<Cart />}></Route>
-              <Route path="book/:id" element={<Detail />}></Route>
-              <Route path="about" element={<About />}></Route>
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-        <Modal />
-      </div>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <div className="app">
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/">
+                            <Route
+                                index
+                                element={<Navigate to="/home" />}
+                            ></Route>
+                            <Route path="home" element={<Home />}></Route>
+                            <Route path="shop" element={<Shop />}></Route>
+                            <Route path="cart" element={<Cart />}></Route>
+                            <Route path="detail/:id" element={<Detail />}></Route>
+                            <Route path="about" element={<About />}></Route>
+                            <Route path="*" element={<NotFound />} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+                <Modal />
+            </div>
+        </Provider>
+    );
 }
 
 reactDOM.render(<App />, document.getElementById("root"));

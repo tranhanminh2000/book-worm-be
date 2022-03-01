@@ -3,6 +3,7 @@ import "./carousel.scss";
 import { chunk } from "lodash";
 import Card from "./../Card/Card";
 import classNames from "classnames";
+
 function Carousel({ list }) {
     const listCarousel = chunk(list, 4); // [[1,2,3,4],[5,6,7,8],[9,10]]
 
@@ -11,7 +12,7 @@ function Carousel({ list }) {
 
         xhtml = listBook.map((book) => {
             return (
-                <div className="col-3 col-sm-3 product-list-item">
+                <div className="col-6 col-sm-3 product-list-item">
                     <Card item={book} />
                 </div>
             );

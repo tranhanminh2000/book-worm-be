@@ -1,18 +1,38 @@
+import classNames from "classnames";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Carousel from "../../component/Carousel/Carousel.jsx";
+import Feature from "../../component/Feature/Feature.jsx";
 import Layout from "../../component/Layout/Layout.jsx";
 import AxiosService from "../../services/AxiosService.js";
 import "./home.scss";
 
 const Home = () => {
     const [listMostDiscount, setListMostDiscount] = useState([]);
-    const [listRecommended, setListRecommended] = useState([]);
-    const [listPopular, setListPopular] = useState([]);
+    const [feature, setFeature] = useState({
+        type: "",
+        list: [],
+    });
 
-    useEffect(async () => {
+    useEffect(() => {
+        getListMostDiscount();
+        getListRecommended();
+    }, []);
+
+    const getListMostDiscount = async () => {
         const res = await AxiosService.get("/books/mostDiscount?size=10");
         setListMostDiscount(res.data);
-    }, [listRecommended, listPopular]);
+    };
+
+    const getListRecommended = async () => {
+        const res = await AxiosService.get("/books/recommended?size=8");
+        setFeature({ ...feature, type: "recommended", list: res.data });
+    };
+
+    const getListPopular = async () => {
+        const res = await AxiosService.get("/books/popular?size=8");
+        setFeature({ ...feature, type: "popular", list: res.data });
+    };
 
     return (
         <Layout>
@@ -20,11 +40,13 @@ const Home = () => {
                 <section className="container on-sale">
                     <div className="on-sale-header">
                         <h2 className="title">On Sale</h2>
-                        <button className="btn">123</button>
+                        <Link to="/" className="view-all btn">
+                            View All
+                        </Link>
                     </div>
 
                     <div className="on-sale-content">
-                        <Carousel list={listMostDiscount}/>
+                        <Carousel list={listMostDiscount} />
                     </div>
                 </section>
 
@@ -32,168 +54,27 @@ const Home = () => {
                     <div className="feature-header">
                         <h2 className="title">Feature Books</h2>
                         <div className="options">
-                            <button className="btn recommended active">
+                            <button
+                                className={classNames("btn recommended", {
+                                    active: feature.type === "recommended",
+                                })}
+                                onClick={getListRecommended}
+                            >
                                 Recommended
                             </button>
-                            <button className="btn popular">Popular</button>
+                            <button
+                                className={classNames("btn popular", {
+                                    active: feature.type === "popular",
+                                })}
+                                onClick={getListPopular}
+                            >
+                                Popular
+                            </button>
                         </div>
                     </div>
 
                     <div className="feature-content">
-                        <div className="products-list">
-                            <div className="row">
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-3 col-sm-3 product-list-item">
-                                    <div
-                                        className="card"
-                                        style={{ width: "100%" }}
-                                    >
-                                        <img src="https://via.placeholder.com/350x350" />
-                                        <div className="card-body">
-                                            <h5 className="card-title">
-                                                Book Name
-                                            </h5>
-                                            <p className="card-text">
-                                                Some quick example text to build
-                                                on the card title and make up
-                                                the bulk of the card's content.
-                                            </p>
-                                            <div>500$$$</div>
-                                            <a
-                                                href="#"
-                                                className="btn btn-primary"
-                                            >
-                                                Go somewhere
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <Feature list={feature.list} />
                     </div>
                 </section>
             </div>

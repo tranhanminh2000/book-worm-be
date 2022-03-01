@@ -20,12 +20,11 @@ export const actionGetAllBook = () => {
 export const actionGetBookDetail = (id)=>{
   return async(dispatch) => {
     dispatch({ type: types.GET_BOOK_DETAIL_REQUEST });
-    const res = await AxiosService.get(APP_BASE_URL + "/book/" + id);
-    
+    const res = await AxiosService.get("/books/" + id);
     if (res.status === 200) {
       dispatch({
         type: types.GET_BOOK_DETAIL_SUCCESS,
-        payLoad: { book: res.data.data },
+        payLoad: { detail: res.data },
       });
     } else {
       dispatch({ types: types.GET_BOOK_DETAIL_FAILED });

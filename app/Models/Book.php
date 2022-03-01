@@ -31,7 +31,7 @@ class Book extends Model
 
     public function discount()
     {
-        return $this->hasOne(Review::class);
+        return $this->hasOne(Discount::class);
     }
 
     public function order_item()
