@@ -17,9 +17,10 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $reviewRepository;
+    public ReviewRepository $reviewRepository;
 
-    public function __construct(reviewRepository $reviewRepository){
+    public function __construct(reviewRepository $reviewRepository)
+    {
         $this->reviewRepository = $reviewRepository;
     }
 
@@ -31,7 +32,8 @@ class ReviewController extends Controller
         $filter = $request->query('filter');
         $bookId = $request->query('bookId');
 
-        $reviews = $this->reviewRepository->selectByCondition($sort, $filter, $bookId)->paginate($size);
+        $reviews = $this->reviewRepository->selectByCondition($sort, $filter, $bookId)
+            ->paginate($size);
         $avgStar = $this->reviewRepository->getAverageStar($bookId);
         $listStarClassify = $this->reviewRepository->getListStarClassify($bookId);
 
@@ -92,7 +94,6 @@ class ReviewController extends Controller
             "success" => true,
             "newReview" => $result,
         ], 200);;
-
     }
 
     /**
@@ -103,7 +104,6 @@ class ReviewController extends Controller
      */
     public function show($id)
     {
-
     }
 
     /**
@@ -139,6 +139,4 @@ class ReviewController extends Controller
     {
         //
     }
-
-
 }

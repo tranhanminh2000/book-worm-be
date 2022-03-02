@@ -14,7 +14,7 @@ class AlterReviewsTable extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE review ALTER COLUMN rating_start TYPE smallint USING (rating_start)::smallint');
+        DB::statement('ALTER TABLE review ALTER COLUMN rating_star TYPE smallint USING (rating_star)::smallint');
     }
 
     /**

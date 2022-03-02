@@ -13,39 +13,49 @@ class ReviewRepository
         $filterBy = null;
         $filterValue = null;
 
-        foreach ($sort as $key => $value) {
-            $sortBy = $key;
-            $sortValue = $value;
+        if (isset($sort)) {
+            foreach ($sort as $key => $value) {
+                $sortBy = $key;
+                $sortValue = $value;
+            }
         }
 
-        foreach ($filter as $key => $value) {
-            $filterBy = $key;
-            $filterValue = $value;
+        if (isset($filter)) {
+            foreach ($filter as $key => $value) {
+                $filterBy = $key;
+                $filterValue = $value;
+            }
         }
 
-        return Review::findReviews($bookId)->sort($sortBy, $sortValue, $bookId)->filter($filterBy, $filterValue);
-
+        if (isset($sortBy)) {
+            if (isset($filterBy)) {
+                return Review::findReviews($bookId)->sort($sortBy, $sortValue, $bookId)->filter($filterBy, $filterValue);
+            }
+            return Review::findReviews($bookId)->sort($sortBy, $sortValue, $bookId);
+        }
     }
 
-    public function getAverageStar($bookId){
+    public function getAverageStar($bookId)
+    {
         return Review::findReviews($bookId)
-            ->selectRaw("AVG(rating_start) as avg_rating")->get();
-
+            ->selectRaw("AVG(rating_star) as avg_rating")->get();
     }
 
-    public function getListStarClassify($bookId){
+    public function getListStarClassify($bookId)
+    {
         return Review::findReviews($bookId)
-            ->selectRaw("rating_start, count(rating_start) as count")
-            ->groupBy("rating_start")
+            ->selectRaw("rating_star, count(rating_star) as count")
+            ->groupBy("rating_star")
             ->get();
     }
 
-    public function createNewReview($bookId, $reviewTitle, $reviewDetails, $ratingStar){
+    public function createNewReview($bookId, $reviewTitle, $reviewDetails, $ratingStar)
+    {
         $review = new Review();
         $review->book_id = $bookId;
         $review->review_title = $reviewTitle;
         $review->review_details = $reviewDetails;
-        $review->rating_start = $ratingStar;
+        $review->rating_star = $ratingStar;
 
         $date = date_create();
         $review->review_date = date_format($date, 'Y-m-d H:i:s');
@@ -53,6 +63,4 @@ class ReviewRepository
         $review->save();
         return $review;
     }
-
-
 }

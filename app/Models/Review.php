@@ -28,7 +28,7 @@ class Review extends Model
         return $query;
     }
 
-    public function scopeFilter($query, $filterBy = "rating_start", $filterValue = "5"){
+    public function scopeFilter($query, $filterBy = "rating_star", $filterValue = "5"){
 
         $query->where($filterBy, $filterValue);
         return $query;

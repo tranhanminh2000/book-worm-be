@@ -42,9 +42,9 @@ class Book extends Model
     public function scopeFilter($query, $customQuery, $filterBy, $filterValue)
     {
         if ($filterBy == "rating_star") {
-            $customQuery->selectRaw("AVG(review.rating_start) as avg_rating")
+            $customQuery->selectRaw("AVG(review.rating_star) as avg_rating")
                 ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
-                ->havingRaw("AVG(review.rating_start) >= ${filterValue}");
+                ->havingRaw("AVG(review.rating_star) >= ${filterValue}");
 
         } else {
             $customQuery->where($filterBy, $filterValue);
