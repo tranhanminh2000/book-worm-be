@@ -13,6 +13,7 @@ import Modal from "./component/Modal/Modal.jsx";
 import configStore from "./store/config.js";
 import { Provider } from "react-redux";
 import NotFound from "./containers/NotFound/NotFound.jsx";
+import Loading from "./component/Loading/Loading.jsx";
 
 const store = configStore();
 
@@ -30,7 +31,10 @@ function App() {
                             <Route path="home" element={<Home />}></Route>
                             <Route path="shop" element={<Shop />}></Route>
                             <Route path="cart" element={<Cart />}></Route>
-                            <Route path="detail/:id" element={<Detail />}></Route>
+                            <Route
+                                path="detail/:id"
+                                element={<Detail />}
+                            ></Route>
                             <Route path="about" element={<About />}></Route>
                             <Route path="*" element={<NotFound />} />
                         </Route>

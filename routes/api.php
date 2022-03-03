@@ -44,10 +44,10 @@ Route::get("v1/categories", [CategoryController::class, 'getCategoriesName']);
 Route::get("v1/authors", [AuthorController::class, 'getAuthorsName']);
 
 
+Route::post("v1/reviews", [ReviewController::class, "store"]);
 // check login
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::post("v1/reviews", [ReviewController::class, "store"]);
 
     Route::post("v1/orders", [OrderController::class, "store"]);
 });

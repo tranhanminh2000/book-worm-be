@@ -1,2 +1,24 @@
-@import "../../scss/variables"
+@import "../../scss/variables";
 
+.pagination {
+    .page-item {
+        color: $secondary-color;
+        font-weight: bold;
+        &.active {
+            .page-link {
+                background: $secondary-color;
+                border-color: $secondary-color;
+            }
+        }
+        &.disabled {
+            .page-link {
+                opacity: 0.5;
+                cursor: none;
+            }
+        }
+        .page-link {
+            color: $secondary-color;
+            cursor: pointer;
+        }
+    }
+}

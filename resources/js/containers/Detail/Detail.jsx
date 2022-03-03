@@ -6,7 +6,7 @@ import * as types from "../../constants";
 import "./detail.scss";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import Review from "../../component/Review/Review.jsx";
+import ReviewSection from "../../component/ReviewSection/ReviewSection.jsx";
 
 const Detail = () => {
     let { id } = useParams();
@@ -120,7 +120,7 @@ const Detail = () => {
                             </div>
                         </div>
                     </div>
-                    <Review />
+                    <ReviewSection />
                 </div>
             </div>
         </Layout>
