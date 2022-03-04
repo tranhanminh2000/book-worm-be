@@ -14,6 +14,7 @@ import configStore from "./store/config.js";
 import { Provider } from "react-redux";
 import NotFound from "./containers/NotFound/NotFound.jsx";
 import Loading from "./component/Loading/Loading.jsx";
+import Skeleton from "./skeletons/SkeletonCard/SkeletonCard";
 
 const store = configStore();
 

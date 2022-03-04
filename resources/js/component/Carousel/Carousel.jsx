@@ -3,6 +3,7 @@ import "./carousel.scss";
 import { chunk } from "lodash";
 import Card from "./../Card/Card";
 import classNames from "classnames";
+import SkeletonCard from "./../../skeletons/SkeletonCard/SkeletonCard";
 
 function Carousel({ list }) {
     const listCarousel = chunk(list, 4); // [[1,2,3,4],[5,6,7,8],[9,10]]
@@ -10,7 +11,7 @@ function Carousel({ list }) {
     const renderBookItem = (listBook) => {
         let xhtml = [];
 
-        xhtml = listBook.map((book) => {
+        xhtml = listBook?.map((book) => {
             return (
                 <div className="col-6 col-sm-3 product-list-item">
                     <Card item={book} />
@@ -39,6 +40,27 @@ function Carousel({ list }) {
         return xhtml;
     };
 
+    const renderCarouselSkeleton = () => {
+        return (
+            <div className={classNames("carousel-item active")}>
+                <div className="row">
+                    <div className="col-6 col-sm-3 product-list-item">
+                        <SkeletonCard />
+                    </div>
+                    <div className="col-6 col-sm-3 product-list-item">
+                        <SkeletonCard />
+                    </div>
+                    <div className="col-6 col-sm-3 product-list-item">
+                        <SkeletonCard />
+                    </div>
+                    <div className="col-6 col-sm-3 product-list-item">
+                        <SkeletonCard />
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div className="slider">
             <div
@@ -48,7 +70,8 @@ function Carousel({ list }) {
                 data-bs-interval="false"
             >
                 <div class="carousel-inner">
-                    {renderCarouselItem(listCarousel)}
+                    {list.length ? renderCarouselItem(listCarousel) : null}
+                    {list.length === 0 ? renderCarouselSkeleton() : null}
                 </div>
                 <button
                     class="carousel-control-prev"

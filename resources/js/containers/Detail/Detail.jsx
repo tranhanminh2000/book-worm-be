@@ -7,6 +7,7 @@ import "./detail.scss";
 import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import ReviewSection from "../../component/ReviewSection/ReviewSection.jsx";
+import Skeleton from "react-loading-skeleton";
 
 const Detail = () => {
     let { id } = useParams();
@@ -64,24 +65,46 @@ const Detail = () => {
                                     <div className="row wrapper">
                                         <div className="col-4 col-xs-4 left">
                                             <div className="wrapper-img">
-                                                <img
-                                                    src={`http://127.0.0.1:8000/bookcover/${detail.photo}.jpg`}
-                                                    alt=""
-                                                />
+                                                {!detail.photo ? (
+                                                    <Skeleton
+                                                        height={"100%"}
+                                                        width={"100%"}
+                                                    />
+                                                ) : null}
+                                                {detail.photo ? (
+                                                    <img
+                                                        src={`http://127.0.0.1:8000/bookcover/${detail.photo}.jpg`}
+                                                        alt=""
+                                                    />
+                                                ) : null}
                                             </div>
-
                                             <div className="author">
-                                                <span className="author-name">
-                                                    By {detail.author}
-                                                </span>
+                                                {detail.author ? (
+                                                    <span className="author-name">
+                                                        'By ${detail.author}'
+                                                    </span>
+                                                ) : null}
+                                                {!detail.author ? (
+                                                    <Skeleton />
+                                                ) : null}
                                             </div>
                                         </div>
                                         <div className="col-8 col-xs-8 right">
                                             <h3 className="book-name">
-                                                {detail.title}
+                                                {detail.title
+                                                    ? detail.title
+                                                    : null}
+                                                {!detail.title ? (
+                                                    <Skeleton />
+                                                ) : null}
                                             </h3>
                                             <p className="book-description">
-                                                {detail.summary}
+                                                {detail.summary
+                                                    ? detail.summary
+                                                    : null}
+                                                {!detail.summary ? (
+                                                    <Skeleton count={5} />
+                                                ) : null}
                                             </p>
                                         </div>
                                     </div>
@@ -93,6 +116,7 @@ const Detail = () => {
                                         detail.price,
                                         detail.discountPrice
                                     )}
+
                                     <div className="quantity">
                                         <p>Quantity</p>
                                         <div className="control">
