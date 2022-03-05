@@ -25,7 +25,11 @@ function Card({ item }) {
     };
 
     return (
-        <Link to={"/detail/" + item.id} className="card bwm-card" style={{ width: "100%" }}>
+        <Link
+            to={"/detail/" + item.id}
+            className="card bwm-card"
+            style={{ width: "100%" }}
+        >
             <div className="wrapper-img">
                 <img src={`/bookcover/${img}.jpg`} />
             </div>

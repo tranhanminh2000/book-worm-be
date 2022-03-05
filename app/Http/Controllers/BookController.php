@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Repositories\Book\BookRepository;
+use App\Support\Collection;
 use Illuminate\Http\Request;
 
 
@@ -11,7 +12,8 @@ class BookController extends Controller
 {
     public $bookRepository;
 
-    public function __construct(BookRepository $bookRepository){
+    public function __construct(BookRepository $bookRepository)
+    {
         $this->bookRepository = $bookRepository;
     }
 
@@ -26,9 +28,11 @@ class BookController extends Controller
         $sort   = $request->query("sort");
         $filter = $request->query("filter");
 
-        $books = $this->bookRepository->selectByCondition($sort, $filter)->paginate($size);
-        return $books;
+        $books = $this->bookRepository->selectByCondition($sort, $filter)->get()->unique();
 
+        $result = (new Collection($books))->paginate($size);
+
+        return  $result;
     }
 
     /**
@@ -60,8 +64,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-         $book = $this->bookRepository->selectById($id);
-         return $book;
+        $book = $this->bookRepository->selectById($id);
+        return $book;
     }
 
     /**
@@ -98,21 +102,24 @@ class BookController extends Controller
         //
     }
 
-    public function getMostDiscount(Request $request){
+    public function getMostDiscount(Request $request)
+    {
         $size = $request->query('size');
 
         $books = $this->bookRepository->selectByMostDiscount();
         return $books->limit($size)->get();
     }
 
-    public function getRecommended(Request $request){
+    public function getRecommended(Request $request)
+    {
         $size = $request->query('size');
 
         $books = $this->bookRepository->selectByRecommended();
         return $books->limit($size)->get();
     }
 
-    public function getPopular(Request $request){
+    public function getPopular(Request $request)
+    {
         $size = $request->query('size');
 
         $books = $this->bookRepository->selectByPopular()->limit($size)->get();

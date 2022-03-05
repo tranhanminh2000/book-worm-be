@@ -7,6 +7,13 @@
                 .title {
                     margin-bottom: 20px;
                     text-transform: uppercase;
+                    .filter-title{
+                        color: #999;
+                        font-size: 1rem;
+                        margin-left: 20px;
+                        text-transform: capitalize;
+                        font-style: italic;
+                    }
                 }
             }
             .row {

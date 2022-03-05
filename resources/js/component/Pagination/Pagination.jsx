@@ -7,9 +7,8 @@ function Pagination(prop) {
 
     const renderPaginateListItem = (list) => {
         let xhtml = [];
-        list = list ? list : [];
 
-        xhtml = list.map((listItem) => {
+        xhtml = list?.map((listItem) => {
             return (
                 <li
                     class={classNames("page-item", {

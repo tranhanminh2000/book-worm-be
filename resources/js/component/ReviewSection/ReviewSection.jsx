@@ -8,6 +8,12 @@ import { AiFillStar } from "react-icons/ai";
 import Pagination from "../Pagination/Pagination.jsx";
 import ReviewForm from "./../ReviewForm/ReviewForm";
 import Loading from "../Loading/Loading";
+import DropdownMenu from "./../DropdownMenu/DropdownMenu";
+
+const sortList = [
+    { title: "Sort by: newest to oldest", by: "review_date", value: "desc" },
+    { title: "Sort by: oldest to newest", by: "review_date", value: "asc" },
+];
 
 function ReviewSection() {
     const { id } = useParams();
@@ -18,6 +24,7 @@ function ReviewSection() {
         size: 5,
         id: id,
         sort: {
+            title: "Sort by: newest to oldest",
             by: "review_date",
             value: "desc",
         },
@@ -60,10 +67,10 @@ function ReviewSection() {
         }
     };
 
-    const handleSort = (sortBy, sortValue) => {
+    const handleSort = (sortTitle, sortBy, sortValue) => {
         setCondition({
             ...condition,
-            sort: { by: sortBy, value: sortValue },
+            sort: { title: sortTitle, by: sortBy, value: sortValue },
             page: 1,
         });
     };
@@ -167,45 +174,17 @@ function ReviewSection() {
                                 {review.reviewData?.total} reviews
                             </p>
                             <div className="button-group">
-                                <button
-                                    class="btn btn-secondary dropdown-toggle sort-btn"
-                                    type="button"
-                                    id="dropdownMenuButton1"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    Sort by:{" "}
-                                    {condition.sort.value === "desc"
-                                        ? "newest to oldest"
-                                        : "oldest to newest"}
-                                </button>
-                                <ul
-                                    class="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton1"
-                                >
-                                    <li
-                                        onClick={() =>
-                                            handleSort("review_date", "desc")
-                                        }
-                                    >
-                                        <div class="dropdown-item">
-                                            Sort by date: newest to oldest
-                                        </div>
-                                    </li>
-                                    <li
-                                        onClick={() =>
-                                            handleSort("review_date", "asc")
-                                        }
-                                    >
-                                        <div class="dropdown-item">
-                                            Sort by date: oldest to newest
-                                        </div>
-                                    </li>
-                                </ul>
+                                <DropdownMenu
+                                    id="sort"
+                                    title={condition.sort.title}
+                                    list={sortList}
+                                    click={handleSort}
+                                />
+
                                 <button
                                     class="btn btn-secondary dropdown-toggle show-btn"
                                     type="button"
-                                    id="dropdownMenuButton2"
+                                    id="show"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
@@ -213,7 +192,7 @@ function ReviewSection() {
                                 </button>
                                 <ul
                                     class="dropdown-menu"
-                                    aria-labelledby="dropdownMenuButton2"
+                                    aria-labelledby="show"
                                 >
                                     <li onClick={() => handleSize(5)}>
                                         <div class="dropdown-item">Show 5</div>
@@ -235,9 +214,7 @@ function ReviewSection() {
                     </div>
                 </div>
                 <div className="col-12 col-sm-4">
-                    <ReviewForm
-                        returnDefaultState={returnDefaultState}
-                    />
+                    <ReviewForm returnDefaultState={returnDefaultState} />
                 </div>
             </div>
         </div>

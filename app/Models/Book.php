@@ -43,9 +43,8 @@ class Book extends Model
     {
         if ($filterBy == "rating_star") {
             $customQuery->selectRaw("AVG(review.rating_star) as avg_rating")
-                ->groupBy("book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
+                ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'author_name')
                 ->havingRaw("AVG(review.rating_star) >= ${filterValue}");
-
         } else {
             $customQuery->where($filterBy, $filterValue);
         }

@@ -27,10 +27,13 @@ class BookRepository
             $sortValue = $value;
         }
 
-        foreach ($filter as $key => $value) {
-            $filterBy = $key;
-            $filterValue = $value;
+        if (isset($filter)) {
+            foreach ($filter as $key => $value) {
+                $filterBy = $key;
+                $filterValue = $value;
+            }
         }
+
 
         if (isset($sortBy) && $sortBy == "type") {
             switch ($sortValue) {
@@ -71,8 +74,7 @@ class BookRepository
 
     public function selectByMostDiscount()
     {
-        $result = Book::select('book.id','book_title', 'book_summary', 'book_price', 'book_cover_photo', 'author_name', "discount_price", DB::raw("book_price - discount_price AS  most_discount"))
-            ->distinct()
+        $result = Book::select('book.id', 'book_title', 'book_summary', 'book_price', 'book_cover_photo', 'author_name', "discount_price", DB::raw("book_price - discount_price AS  most_discount"))
             ->join("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
@@ -136,10 +138,10 @@ class BookRepository
             'book_title',
             'book_summary',
             'book_price',
+            'book_cover_photo',
             'author_name',
             "discount_price"
         )
-            ->distinct()
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Repositories\Review\ReviewRepository;
-
+use App\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -32,8 +32,9 @@ class ReviewController extends Controller
         $filter = $request->query('filter');
         $bookId = $request->query('bookId');
 
-        $reviews = $this->reviewRepository->selectByCondition($sort, $filter, $bookId)
-            ->paginate($size);
+        $reviews = $this->reviewRepository->selectByCondition($sort, $filter, $bookId)->get()->unique();
+
+        $result = (new Collection($reviews))->paginate($size);
         $avgStar = $this->reviewRepository->getAverageStar($bookId);
         $listStarClassify = $this->reviewRepository->getListStarClassify($bookId);
 
@@ -42,7 +43,7 @@ class ReviewController extends Controller
             "data" => [
                 "avg_star" => $avgStar[0]["avg_rating"],
                 "listStarClassify" => $listStarClassify,
-                "reviewsData" => $reviews
+                "reviewsData" => $result
             ]
         ], 200);
     }
