@@ -26,7 +26,7 @@ const Shop = () => {
     const dispatch = useDispatch();
     const shopFilter = useSelector((state) => state.shopFilter);
     const shopProduct = useSelector((state) => state.shopProduct);
-    console.log(shopFilter);
+
     useEffect(() => {
         dispatch(actions.actionGetFilterList());
     }, []);

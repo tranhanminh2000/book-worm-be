@@ -21,7 +21,19 @@ const Detail = () => {
     useEffect(() => {
         dispatch(actions.actionGetBookDetail(id));
     }, []);
-
+    const handleAddToCart = () => {
+        console.log(id);
+        let item = {
+            id: id,
+            title: detail.title,
+            author: detail.author,
+            price: detail.price,
+            discountPrice: detail.discountPrice,
+            photo: detail.photo,
+            quantity: detail.quantity,
+        };
+        dispatch({ type: types.ADD_CART_ITEM, payLoad: { cartItem: item } });
+    };
     const renderPrice = (bookPrice, discountPrice) => {
         return (
             <div className="price">
@@ -136,7 +148,10 @@ const Detail = () => {
                                                 +
                                             </span>
                                         </div>
-                                        <button className="btn add-to-cart">
+                                        <button
+                                            className="btn add-to-cart"
+                                            onClick={handleAddToCart}
+                                        >
                                             Add to cart
                                         </button>
                                     </div>

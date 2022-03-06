@@ -40,7 +40,7 @@ export const actionGetBookList = (condition) => {
         dispatch({ type: types.GET_BOOK_LIST_REQUEST });
 
         let uri = generateUriFromCondition(condition);
-        console.log(uri);
+
         const res = await AxiosService.get(uri);
 
         if (res.status === 200) {

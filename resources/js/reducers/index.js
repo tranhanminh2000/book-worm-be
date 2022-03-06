@@ -4,6 +4,7 @@ import detail from "./detail.reducer";
 import review from "./review.reducer";
 import shopFilter from "./shopFilter.reducer";
 import shopProduct from "./shopProduct.reducer";
+import cart from "./cart.reducer";
 
 const rootReducer = combineReducers({
     modal,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
     review,
     shopFilter,
     shopProduct,
+    cart
 });
 
 export default rootReducer;
