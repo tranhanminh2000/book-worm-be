@@ -1,14 +1,17 @@
+import React from "react";
 import "./cartList.scss";
-import React, { useState } from "react";
 import classNames from "classnames";
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from "../../actions";
 
-const CardList = ({ list }) => {
+const CardList = ({
+    list,
+    handleRemoveItem,
+    handleIncreaseQuantity,
+    handleDecreaseQuantity,
+}) => {
     const renderListItem = (list) => {
         let xhtml = [];
 
-        xhtml = list.map((listItem) => {
+        xhtml = list.map((listItem, index) => {
             return (
                 <tr>
                     <td style={{ width: "50%" }}>
@@ -45,22 +48,43 @@ const CardList = ({ list }) => {
                     </td>
                     <td>
                         <div className="control-quantity">
-                            <span className="minus">-</span>
+                            <span
+                                className="minus"
+                                onClick={() => handleDecreaseQuantity(index)}
+                            >
+                                -
+                            </span>
                             <span className="number">{listItem.quantity}</span>
-                            <span className="plus">+</span>
+                            <span
+                                className={classNames("plus", {
+                                    disabled: listItem.quantity === 8,
+                                })}
+                                onClick={() => handleIncreaseQuantity(index)}
+                            >
+                                +
+                            </span>
                         </div>
                     </td>
                     <td>
                         <div>
                             {listItem.discountPrice
-                                ? listItem.quantity *
-                                  parseFloat(listItem.discountPrice).toFixed(2)
-                                : listItem.quantity *
-                                  parseFloat(listItem.discountPrice).toFixed(2)}
+                                ? (
+                                      listItem.quantity *
+                                      parseFloat(listItem.discountPrice)
+                                  ).toFixed(2)
+                                : (
+                                      listItem.quantity *
+                                      parseFloat(listItem.price)
+                                  ).toFixed(2)}
                         </div>
                     </td>
                     <td>
-                        <div className={"remove"}>X</div>
+                        <div
+                            className={"remove"}
+                            onClick={() => handleRemoveItem(listItem.id)}
+                        >
+                            X
+                        </div>
                     </td>
                 </tr>
             );

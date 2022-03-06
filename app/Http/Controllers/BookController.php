@@ -106,23 +106,26 @@ class BookController extends Controller
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByMostDiscount();
-        return $books->limit($size)->get();
+        $books = $this->bookRepository->selectByMostDiscount()->get();
+
+        return $books->unique()->take($size);
     }
 
     public function getRecommended(Request $request)
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByRecommended();
-        return $books->limit($size)->get();
+        $books = $this->bookRepository->selectByRecommended()->get();
+
+        return $books->unique()->take($size);
     }
 
     public function getPopular(Request $request)
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByPopular()->limit($size)->get();
-        return $books;
+        $books = $this->bookRepository->selectByPopular()->get();
+
+        return $books->unique()->take($size);
     }
 }

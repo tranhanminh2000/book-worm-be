@@ -21,8 +21,8 @@ const Detail = () => {
     useEffect(() => {
         dispatch(actions.actionGetBookDetail(id));
     }, []);
+
     const handleAddToCart = () => {
-        console.log(id);
         let item = {
             id: id,
             title: detail.title,

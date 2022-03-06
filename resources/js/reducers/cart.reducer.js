@@ -34,7 +34,7 @@ const reducer = (state = initialState, action) => {
             if (state.cartNumber === 0) {
                 state.cartList.push(cartItem);
             } else {
-                let isItemExisted = state.cartList.find((ele) => {
+                let isItemExisted = state.cartList.some((ele) => {
                     return ele.id == cartItem.id;
                 });
 
@@ -52,16 +52,18 @@ const reducer = (state = initialState, action) => {
                     });
                 }
             }
+
             return {
                 ...state,
                 cartNumber: state.cartNumber + cartItem.quantity,
             };
         case types.INCREASE_ITEM_QUANTITY: {
-            let quantity = state.cartList[action.payLoad.index].quantity;
+            const index = action.payLoad.index;
+            let quantity = state.cartList[index].quantity;
 
             if (quantity < 8) {
                 state.cartNumber++;
-                state.cartList[action.payLoad.index].quantity++;
+                state.cartList[index].quantity++;
             }
 
             return {
@@ -69,27 +71,32 @@ const reducer = (state = initialState, action) => {
             };
         }
         case types.DECREASE_ITEM_QUANTITY: {
-            let quantity = state.cartList[action.payLoad.index].quantity;
+            const index = action.payLoad.index;
+
+            let quantity = state.cartList[index].quantity;
             if (quantity > 1) {
                 state.cartNumber--;
-                state.cartList[action.payLoad.index].quantity--;
+                state.cartList[index].quantity--;
+            } else {
+                state.cartList.splice(action.payLoad.index, 1);
             }
 
             return {
                 ...state,
             };
         }
-        case types.DELETE_CART_ITEM:
-            const { id } = action.payLoad;
+        case types.REMOVE_CART_ITEM:
+            const id = action.payLoad.id;
             const findItem = state.cartList.find((item) => item.id === id);
 
-            const cartUpdated = state.cartList.filter((item) => {
+            const cartFiltered = state.cartList.filter((item) => {
                 return item.id != findItem.id;
             });
+
             return {
                 ...state,
                 cartNumber: state.cartNumber - findItem.quantity,
-                cart: cartUpdated,
+                cartList: cartFiltered,
             };
         default:
             return state;

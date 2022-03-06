@@ -1,28 +1,10 @@
 import React from "react";
-import "./card.scss";
-import classNames from "classnames";
 import { Link } from "react-router-dom";
+import "./card.scss";
 
 function Card({ item }) {
     const img =
         item.book_cover_photo !== null ? item.book_cover_photo : "bookDefault";
-
-    const renderPrice = (bookPrice, discountPrice) => {
-        return (
-            <div className="price">
-                <span
-                    className={classNames("current", {
-                        "bwm-line-through": discountPrice,
-                    })}
-                >
-                    {bookPrice}
-                </span>
-                {discountPrice ? (
-                    <span className="discount">{discountPrice}</span>
-                ) : null}
-            </div>
-        );
-    };
 
     return (
         <Link
@@ -39,7 +21,20 @@ function Card({ item }) {
                     <p className="card-text">{item.author_name}</p>
                 </div>
                 <div className="card-body-foot">
-                    {renderPrice(item.book_price, item.discount_price)}
+                    <div className="price">
+                        {item.discount_price ? (
+                            <>
+                                <span className="current bwm-line-through">
+                                    {item.book_price}
+                                </span>
+                                <span className="discount">
+                                    {item.discount_price}
+                                </span>
+                            </>
+                        ) : (
+                            <span className="current">{item.book_price}</span>
+                        )}
+                    </div>
                 </div>
             </div>
         </Link>
