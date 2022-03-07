@@ -1,20 +1,18 @@
-import reactDOM from "react-dom";
-import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./containers/Home/Home.jsx";
-import Cart from "./containers/Cart/Cart.jsx";
-import Shop from "./containers/Shop/Shop.jsx";
-import Detail from "./containers/Detail/Detail.jsx";
-import About from "./containers/About/About.jsx";
-import "bootstrap/dist/css/bootstrap.min.css"; // import bs style library
 import "bootstrap"; // import bs script library (include: jquery, popper js)
+import "bootstrap/dist/css/bootstrap.min.css"; // import bs style library
+import React from "react";
+import reactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./app.scss";
 import Modal from "./component/Modal/Modal.jsx";
-import configStore from "./store/config.js";
-import { Provider } from "react-redux";
+import About from "./containers/About/About.jsx";
+import Cart from "./containers/Cart/Cart.jsx";
+import Detail from "./containers/Detail/Detail.jsx";
+import Home from "./containers/Home/Home.jsx";
 import NotFound from "./containers/NotFound/NotFound.jsx";
-import Loading from "./component/Loading/Loading.jsx";
-import Skeleton from "./skeletons/SkeletonCard/SkeletonCard";
+import Shop from "./containers/Shop/Shop.jsx";
+import configStore from "./store/config.js";
 
 const store = configStore();
 

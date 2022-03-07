@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./header.scss";
 import * as actions from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useMatch } from "react-router-dom";
 import classNames from "classnames";
 import { NAV_LINK_LIST } from "../../constants/navLink.constant";
+import LoginForm from "../LoginForm/loginForm";
 
 const Header = () => {
     const dispatch = useDispatch();
     const cart = useSelector((state) => state.cart);
+    const auth = useSelector((state) => state.auth);
 
-    const handleShowModal = () => {
+    const handleShowLogin = () => {
         dispatch(actions.showModal());
+        dispatch(actions.changeModalTitle("Login"));
+        dispatch(actions.changeModalContent(<LoginForm />));
     };
+
+    const checkCurrentUser = () => {
+        dispatch(actions.actCheckCurrentUser());
+    };
+
+    useEffect(() => {
+        checkCurrentUser();
+    }, [auth]);
 
     const navListItem = ({ label, to, activeOnlyWhen, icon }) => {
         const match = useMatch({
@@ -82,8 +94,8 @@ const Header = () => {
                         <ul className="navbar-nav mb-2 mb-lg-0">
                             {renderNavListItem(NAV_LINK_LIST)}
                         </ul>
-                        <div id="sign-in" onClick={handleShowModal}>
-                            Sign In
+                        <div id="sign-in" onClick={handleShowLogin}>
+                            Log In
                         </div>
                     </div>
                 </div>

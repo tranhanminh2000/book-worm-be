@@ -18,7 +18,7 @@ use App\Http\Controllers\OrderController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth:sanctum')->get('/user', function(Request $request) {
+Route::middleware('auth:sanctum')->get('v1/user', function(Request $request) {
     $user = $request->user();
     $user['full_name'] = $user->full_name;
 

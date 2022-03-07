@@ -1,21 +1,16 @@
 import * as types from "../constants";
 
-const initialState = {
+let initialState = {
     cartNumber: 0,
     cartList: [],
 };
 
-// /*
-//     item {
-//         img
-//         bookTitle,
-//         AuthorName,
-//         price,
-//         discountPrice
-//         quantity
-//         total
-//     }
-// */
+if (localStorage.getItem("cart")) {
+    initialState = JSON.parse(localStorage.getItem("cart"));
+} else {
+    localStorage.setItem("cart", JSON.stringify(initialState));
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case types.ADD_CART_ITEM:
@@ -53,6 +48,14 @@ const reducer = (state = initialState, action) => {
                 }
             }
 
+            localStorage.setItem(
+                "cart",
+                JSON.stringify({
+                    ...state,
+                    cartNumber: state.cartNumber + cartItem.quantity,
+                })
+            );
+
             return {
                 ...state,
                 cartNumber: state.cartNumber + cartItem.quantity,
@@ -66,6 +69,13 @@ const reducer = (state = initialState, action) => {
                 state.cartList[index].quantity++;
             }
 
+            localStorage.setItem(
+                "cart",
+                JSON.stringify({
+                    ...state,
+                })
+            );
+
             return {
                 ...state,
             };
@@ -78,8 +88,16 @@ const reducer = (state = initialState, action) => {
                 state.cartNumber--;
                 state.cartList[index].quantity--;
             } else {
+                state.cartNumber--;
                 state.cartList.splice(action.payLoad.index, 1);
             }
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify({
+                    ...state,
+                })
+            );
 
             return {
                 ...state,
@@ -92,6 +110,15 @@ const reducer = (state = initialState, action) => {
             const cartFiltered = state.cartList.filter((item) => {
                 return item.id != findItem.id;
             });
+
+            localStorage.setItem(
+                "cart",
+                JSON.stringify({
+                    ...state,
+                    cartNumber: state.cartNumber - findItem.quantity,
+                    cartList: cartFiltered,
+                })
+            );
 
             return {
                 ...state,

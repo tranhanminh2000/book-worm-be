@@ -1,17 +1,35 @@
 import axios from "axios";
 
+let accessToken = localStorage.getItem("accessToken")
+    ? localStorage.getItem("accessToken")
+    : null;
+
 class AxiosService {
     constructor() {
         let service = axios.create({ baseURL: "http://127.0.0.1:8000/api/v1" });
-        service.interceptors.response.use(this.handleSuccess, this.handleError);
+        service.interceptors.response.use(
+            this.handleResponseSuccess,
+            this.handleResponseError
+        );
+        service.interceptors.request.use(
+            this.handleRequestSuccess,
+            this.handleRequestError
+        );
         this.service = service;
     }
 
-    handleSuccess(response) {
-        return response;
-    }
+    handleRequestSuccess = (request) => {
+        request.headers.Authorization = `Bearer ${accessToken}`;
+        return request;
+    };
 
-    handleError = (error) => {
+    handleResponseError = (error) => {};
+
+    handleResponseSuccess = (response) => {
+        return response;
+    };
+
+    handleRequestError = (error) => {
         switch (error.response.status) {
             case 401:
                 this.redirectTo(document, "/");

@@ -3,7 +3,7 @@ import * as types from "../constants";
 const initialState = {
   showModal: false,
   title: "",
-  component: null,
+  content: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -16,8 +16,8 @@ const reducer = (state = initialState, action) => {
       const { title } = action.payLoad;
       return { ...state, title: title };
     case types.CHANGE_MODAL_CONTENT:
-      const { component } = action.payLoad;
-      return { ...state, component: component };
+      const { content } = action.payLoad;
+      return { ...state, content: content };
     default:
       return state;
   }

@@ -51,6 +51,7 @@ const Shop = () => {
         };
         dispatch(actions.actionGetBookList(condition));
     };
+
     const handleSort = async (sortTile, sortBy, sortValue) => {
         const sort = { title: sortTile, by: sortBy, value: sortValue };
 

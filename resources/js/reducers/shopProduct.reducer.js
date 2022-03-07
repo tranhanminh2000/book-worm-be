@@ -36,6 +36,7 @@ const reducer = (state = initialState, action) => {
         case types.SET_PAGE:
             const page = action.payLoad.page;
             return { ...state, page: page };
+
         default:
             return state;
     }
