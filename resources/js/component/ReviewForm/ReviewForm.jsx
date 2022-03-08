@@ -128,7 +128,7 @@ const ReviewForm = ({ returnDefaultState }) => {
                     : null}
 
                 <button className="btn btn-primary submit-review" type="submit">
-                    123
+                    SUBMIT REVIEW
                 </button>
             </form>
         </div>

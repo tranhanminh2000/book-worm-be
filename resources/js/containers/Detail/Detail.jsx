@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./../../component/Layout/Layout.jsx";
 import { useParams } from "react-router-dom";
 import * as actions from "../../actions";
@@ -8,21 +8,23 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import ReviewSection from "../../component/ReviewSection/ReviewSection.jsx";
 import Skeleton from "react-loading-skeleton";
+import delayAsync from "./../../common/delay";
 
 const Detail = () => {
     let { id } = useParams();
 
+    const [alert, setAlert] = useState("");
+
     const dispatch = useDispatch();
 
-    const detail = useSelector((state) => {
-        return state.detail;
-    });
+    const detail = useSelector((state) => state.detail);
+    const cart = useSelector((state) => state.cart);
 
     useEffect(() => {
         dispatch(actions.actionGetBookDetail(id));
     }, []);
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         let item = {
             id: id,
             title: detail.title,
@@ -32,23 +34,30 @@ const Detail = () => {
             photo: detail.photo,
             quantity: detail.quantity,
         };
-        dispatch({ type: types.ADD_CART_ITEM, payLoad: { cartItem: item } });
-    };
-    const renderPrice = (bookPrice, discountPrice) => {
-        return (
-            <div className="price">
-                <span
-                    className={classNames("current", {
-                        "bwm-line-through": discountPrice,
-                    })}
-                >
-                    {bookPrice}$
-                </span>
-                {discountPrice ? (
-                    <span className="discount">{discountPrice}$</span>
-                ) : null}
-            </div>
+
+        let itemExist = cart.cartList.find(
+            (cartItem) => cartItem.id === item.id
         );
+
+        if (itemExist) {
+            if (itemExist.quantity + item.quantity > 8) {
+                setAlert(
+                    "Total quantity of this book in cart is not allowed over 8 "
+                );
+                await delayAsync(5000);
+                setAlert("");
+            } else {
+                dispatch({
+                    type: types.ADD_CART_ITEM_SUCCESS,
+                    payLoad: { cartItem: item },
+                });
+            }
+        } else {
+            dispatch({
+                type: types.ADD_CART_ITEM_SUCCESS,
+                payLoad: { cartItem: item },
+            });
+        }
     };
 
     const handleIncreaseQuantity = () => {
@@ -124,10 +133,30 @@ const Detail = () => {
                             </div>
                             <div className="col-12 col-sm-4">
                                 <div className="price-detail">
-                                    {renderPrice(
-                                        detail.price,
-                                        detail.discountPrice
-                                    )}
+                                    <div className="price">
+                                        {detail.discountPrice ? (
+                                            <>
+                                                <span
+                                                    className={classNames(
+                                                        "current",
+                                                        {
+                                                            "bwm-line-through":
+                                                                detail.discountPrice,
+                                                        }
+                                                    )}
+                                                >
+                                                    {detail.price}$
+                                                </span>
+                                                <span className="discount">
+                                                    {detail.discountPrice}$
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span className="current">
+                                                {detail.price}$
+                                            </span>
+                                        )}
+                                    </div>
 
                                     <div className="quantity">
                                         <p>Quantity</p>
@@ -148,6 +177,15 @@ const Detail = () => {
                                                 +
                                             </span>
                                         </div>
+                                        {alert ? (
+                                            <div
+                                                class="alert alert-danger"
+                                                role="alert"
+                                                style={{marginTop: "20px"}}
+                                            >
+                                                {alert}
+                                            </div>
+                                        ) : null}
                                         <button
                                             className="btn add-to-cart"
                                             onClick={handleAddToCart}

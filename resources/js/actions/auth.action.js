@@ -15,6 +15,7 @@ export const actCheckCurrentUser = () => {
 
             if (res.status === 200) {
                 let user = res.data;
+
                 dispatch({
                     type: types.USER_LOGGED_IN,
                     payLoad: { id: user.id, fullName: user.full_name },

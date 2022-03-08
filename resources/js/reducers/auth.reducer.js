@@ -1,10 +1,7 @@
 import * as types from "../constants";
 
 let initialState = {
-    user: {
-        id: null,
-        fullName: "",
-    },
+    user: null,
     isLoggedIn: false,
     authenticating: false,
 };

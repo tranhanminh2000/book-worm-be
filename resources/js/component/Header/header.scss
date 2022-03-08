@@ -65,7 +65,7 @@
                     }
                 }
 
-                #sign-in {
+                .logIn {
                     font-weight: 800;
                     display: inline-block;
                     padding: 5px 20px 5px;
@@ -80,6 +80,20 @@
                     &:hover {
                         color: white;
                         background-color: $primary-color;
+                    }
+                }
+
+                .loggedIn {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    button#userConfig{
+                        padding: 0 5px 0!important;
+                    }
+                    .dropdown-menu[data-bs-popper]{
+                        top: 100%!important;
+                        right: 0!important;
+                        left: unset!important;
                     }
                 }
             }

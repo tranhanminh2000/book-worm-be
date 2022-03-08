@@ -1,9 +1,13 @@
+import classNames from "classnames";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as actions from "../../actions";
+import DialogSuccess from "../../component/DialogSuccess/DialogSuccess.jsx";
 import Layout from "../../component/Layout/Layout.jsx";
-import CardList from "./../../component/CartList/CartList.jsx";
-import "./cart.scss";
 import * as types from "../../constants";
+import CardList from "./../../component/CartList/CartList.jsx";
+import Dialog from "./../../component/Dialog/Dialog.jsx";
+import "./cart.scss";
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
@@ -19,8 +23,7 @@ const Cart = () => {
                 );
             } else {
                 return (
-                    accumulator +
-                    parseFloat(current.price) * current.quantity
+                    accumulator + parseFloat(current.price) * current.quantity
                 );
             }
         }, 0);
@@ -47,6 +50,35 @@ const Cart = () => {
         });
     };
 
+    const handlePlaceOrder = () => {
+        dispatch(actions.showModal());
+        dispatch(actions.changeModalTitle("Order successfully"));
+        dispatch(
+            actions.changeModalContent(
+                <DialogSuccess
+                    message={"Success"}
+                    action={handleShowDialog}
+                />
+            )
+        );
+    };
+
+    const handleShowDialog = () => {
+        if (cart.cartList.length === 0) {
+            return;
+        }
+        dispatch(actions.showModal());
+        dispatch(actions.changeModalTitle("Confirm Ordering"));
+        dispatch(
+            actions.changeModalContent(
+                <Dialog
+                    message={`Totals: ${total}$. Do you want to place order ?`}
+                    action={handlePlaceOrder}
+                />
+            )
+        );
+    };
+
     return (
         <Layout>
             <div className="cart">
@@ -68,7 +100,13 @@ const Cart = () => {
                                 <div className="total-title">Cart Totals</div>
                                 <div className="total-content">
                                     <div className="price">{total}$</div>
-                                    <button className="btn order">
+                                    <button
+                                        className={classNames("btn order", {
+                                            disabled:
+                                                cart.cartList.length === 0,
+                                        })}
+                                        onClick={handleShowDialog}
+                                    >
                                         Place Order
                                     </button>
                                 </div>

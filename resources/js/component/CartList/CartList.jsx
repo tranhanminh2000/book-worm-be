@@ -1,6 +1,7 @@
 import React from "react";
 import "./cartList.scss";
 import classNames from "classnames";
+import { Link } from "react-router-dom";
 
 const CardList = ({
     list,
@@ -15,13 +16,11 @@ const CardList = ({
             return (
                 <tr>
                     <td style={{ width: "50%" }}>
-                        <div className="product">
+                        <Link to={`/detail/${listItem.id}`} className="product">
                             <div className="wrapper-img">
                                 <img
                                     src={
-                                        "/book-cover/" +
-                                        listItem.photo +
-                                        ".jpeg"
+                                        "/bookcover/" + listItem.photo + ".jpg"
                                     }
                                     alt=""
                                 />
@@ -30,7 +29,7 @@ const CardList = ({
                                 <div className="title">{listItem.title}</div>
                                 <div className="author">{listItem.author}</div>
                             </div>
-                        </div>
+                        </Link>
                     </td>
                     <td>
                         {listItem.price && listItem.discountPrice ? (

@@ -3,6 +3,7 @@ import "./dropdownMenu.scss";
 
 function DropdownMenu({ title, id, list, click }) {
     const renderListItem = (list) => {
+
         return list.map((listItem) => {
             return (
                 <li>
@@ -17,6 +18,7 @@ function DropdownMenu({ title, id, list, click }) {
                 </li>
             );
         });
+
     };
 
     return (

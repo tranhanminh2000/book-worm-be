@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useMatch } from "react-router-dom";
 import classNames from "classnames";
 import { NAV_LINK_LIST } from "../../constants/navLink.constant";
-import LoginForm from "../LoginForm/loginForm";
+import LoginForm from "../LoginForm/LoginForm";
 
 const Header = () => {
     const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Header = () => {
 
     useEffect(() => {
         checkCurrentUser();
-    }, [auth]);
+    }, [auth.authenticating]);
 
     const navListItem = ({ label, to, activeOnlyWhen, icon }) => {
         const match = useMatch({
@@ -94,9 +94,36 @@ const Header = () => {
                         <ul className="navbar-nav mb-2 mb-lg-0">
                             {renderNavListItem(NAV_LINK_LIST)}
                         </ul>
-                        <div id="sign-in" onClick={handleShowLogin}>
-                            Log In
-                        </div>
+
+                        {auth.user ? (
+                            <div className="loggedIn">
+                                Hello, {auth.user.fullName}{" "}
+                                <div class="dropdown">
+                                    <button
+                                        class="btn btn-secondary dropdown-toggle"
+                                        type="button"
+                                        id="userConfig"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                    ></button>
+                                    <ul
+                                        class="dropdown-menu"
+                                        aria-labelledby="userConfig"
+                                    >
+                                        <li>
+                                            <div class="dropdown-item">
+                                                Log Out
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        ) : null}
+                        {!auth.user ? (
+                            <div className="logIn" onClick={handleShowLogin}>
+                                Log In
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </nav>

@@ -13,7 +13,7 @@ if (localStorage.getItem("cart")) {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.ADD_CART_ITEM:
+        case types.ADD_CART_ITEM_SUCCESS:
             let cartItem = {
                 id: action.payLoad.cartItem.id,
                 title: action.payLoad.cartItem.title,
@@ -60,6 +60,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 cartNumber: state.cartNumber + cartItem.quantity,
             };
+
         case types.INCREASE_ITEM_QUANTITY: {
             const index = action.payLoad.index;
             let quantity = state.cartList[index].quantity;

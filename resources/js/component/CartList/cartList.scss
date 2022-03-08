@@ -18,6 +18,8 @@
                 .product {
                     display: flex;
                     align-items: center;
+                    text-decoration: none !important;
+
                     .wrapper-img {
                         width: 130px;
                         height: 150px;
@@ -28,9 +30,15 @@
                     }
                     .product-info {
                         margin-left: 5px;
+
                         .title {
                             font-size: 20px;
                             font-weight: 800;
+                            max-width: 200px;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            color: black;
                         }
                         .author {
                             color: #999;
@@ -70,7 +78,7 @@
                         height: 30px;
                         font-size: 30px;
                         flex: 1;
-                        &.disabled{
+                        &.disabled {
                             cursor: default;
                             opacity: 0.5;
                             user-select: none;

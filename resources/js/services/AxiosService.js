@@ -1,9 +1,5 @@
 import axios from "axios";
 
-let accessToken = localStorage.getItem("accessToken")
-    ? localStorage.getItem("accessToken")
-    : null;
-
 class AxiosService {
     constructor() {
         let service = axios.create({ baseURL: "http://127.0.0.1:8000/api/v1" });
@@ -19,6 +15,9 @@ class AxiosService {
     }
 
     handleRequestSuccess = (request) => {
+        let accessToken = localStorage.getItem("accessToken")
+            ? JSON.parse(localStorage.getItem("accessToken"))
+            : null;
         request.headers.Authorization = `Bearer ${accessToken}`;
         return request;
     };
