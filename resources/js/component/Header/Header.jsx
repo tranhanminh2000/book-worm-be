@@ -62,6 +62,9 @@ const Header = () => {
         return xhtml;
     };
 
+    const handleLogout = () => {
+        dispatch(actions.actUserLogout());
+    };
     return (
         <div className="bwm-header">
             <nav className="navbar navbar-expand-lg navbar-light">
@@ -111,7 +114,10 @@ const Header = () => {
                                         aria-labelledby="userConfig"
                                     >
                                         <li>
-                                            <div class="dropdown-item">
+                                            <div
+                                                class="dropdown-item"
+                                                onClick={handleLogout}
+                                            >
                                                 Log Out
                                             </div>
                                         </li>

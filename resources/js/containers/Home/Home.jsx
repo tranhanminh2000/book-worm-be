@@ -26,21 +26,21 @@ const Home = () => {
 
     const getListMostDiscount = async () => {
         const res = await AxiosService.get("/books/mostDiscount?size=10");
-        await delayAsync(1000);
+        await delayAsync(500);
         setListMostDiscount(res.data);
     };
 
     const getListRecommended = async () => {
         const res = await AxiosService.get("/books/recommended?size=8");
         setFeature({ type: "recommended", list: "" });
-        await delayAsync(1000);
+        await delayAsync(500);
         setFeature({ ...feature, type: "recommended", list: res.data });
     };
 
     const getListPopular = async () => {
         const res = await AxiosService.get("/books/popular?size=8");
         setFeature({ type: "popular", list: "" });
-        await delayAsync(1000);
+        await delayAsync(500);
         setFeature({ ...feature, type: "popular", list: res.data });
     };
 

@@ -24,6 +24,7 @@ const LoginForm = () => {
         if (res.status === 200) {
             let accessToken = res.data.access_token;
             dispatch(actions.actUserLogin(accessToken));
+            dispatch(actions.hideModal());
         }
     };
 

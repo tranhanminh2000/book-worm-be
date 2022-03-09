@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as actions from "../../actions";
 import DialogSuccess from "../../component/DialogSuccess/DialogSuccess.jsx";
 import Layout from "../../component/Layout/Layout.jsx";
+import LoginForm from "../../component/LoginForm/LoginForm";
 import * as types from "../../constants";
 import CardList from "./../../component/CartList/CartList.jsx";
 import Dialog from "./../../component/Dialog/Dialog.jsx";
@@ -11,9 +13,10 @@ import "./cart.scss";
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
+    const auth = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const calculateTotals = (list) => {
         let total = list.reduce((accumulator, current) => {
             if (current.discountPrice) {
@@ -51,16 +54,28 @@ const Cart = () => {
     };
 
     const handlePlaceOrder = () => {
-        dispatch(actions.showModal());
-        dispatch(actions.changeModalTitle("Order successfully"));
-        dispatch(
-            actions.changeModalContent(
-                <DialogSuccess
-                    message={"Success"}
-                    action={handleShowDialog}
-                />
-            )
-        );
+        if (auth.user) {
+            let orderDetail = {
+                userId: auth.user.id,
+                orderAmount: total,
+            };
+
+            orderDetail.cart = cart.cartList.map((cartItem) => {
+                return {
+                    bookId: cartItem.id,
+                    quantity: cartItem.quantity,
+                    price: cartItem.discountPrice
+                        ? parseFloat(cartItem.discountPrice) * cartItem.quantity
+                        : parseFloat(cartItem.price) * cartItem.quantity,
+                };
+            });
+
+            dispatch(actions.actPostOrders(orderDetail, navigate));
+        } else {
+            dispatch(actions.showModal());
+            dispatch(actions.changeModalTitle("Login"));
+            dispatch(actions.changeModalContent(<LoginForm />));
+        }
     };
 
     const handleShowDialog = () => {

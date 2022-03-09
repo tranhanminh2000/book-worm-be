@@ -24,3 +24,19 @@ export const actCheckCurrentUser = () => {
         }
     };
 };
+
+export const actUserLogout = () => {
+    return async (dispatch) => {
+        if (localStorage.getItem("accessToken")) {
+            const res = await AxiosService.post("/logout");
+
+            if (res.status === 200) {
+                localStorage.removeItem("accessToken");
+                dispatch({
+                    type: types.USER_LOGOUT,
+                });
+            }
+        }
+        return;
+    };
+};
