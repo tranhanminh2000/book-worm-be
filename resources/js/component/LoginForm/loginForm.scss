@@ -21,8 +21,18 @@
 
 .button-group {
     display: flex;
+    margin-top: 10px;
     gap: 10px;
     .btn{
         border: none;
     }
+}
+
+.error-message{
+    color: red;
+    font-size: .8rem!important;
+}
+
+.alert {
+    margin-top: 10px;
 }

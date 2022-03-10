@@ -6,6 +6,7 @@
         font-weight: bold;
         &.active {
             .page-link {
+                color: white;
                 background: $secondary-color;
                 border-color: $secondary-color;
             }

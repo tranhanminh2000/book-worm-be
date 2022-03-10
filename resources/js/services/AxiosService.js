@@ -22,7 +22,9 @@ class AxiosService {
         return request;
     };
 
-    handleResponseError = (error) => {};
+    handleResponseError = (error) => {
+        return Promise.reject(error);
+    };
 
     handleResponseSuccess = (response) => {
         return response;

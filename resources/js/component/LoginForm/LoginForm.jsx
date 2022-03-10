@@ -4,27 +4,45 @@ import * as actions from "../../actions";
 import AxiosService from "../../services/AxiosService";
 import RegisterForm from "./../RegisterForm/RegisterForm";
 import "./loginForm.scss";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
+const loginSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email").required("Email is Required"),
+    password: Yup.string().required("Password is Required"),
+});
+
+// Component
 const LoginForm = () => {
-    const [state, setState] = useState({
-        email: "",
-        password: "",
+    const dispatch = useDispatch();
+
+    let [state, setState] = useState({
         alert: "",
     });
 
-    const dispatch = useDispatch();
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema: loginSchema,
+        onSubmit: (values) => {
+            handleLogin(values);
+        },
+    });
 
-    const handleSubmitLoginForm = async (e) => {
-        e.preventDefault();
-
-        const res = await AxiosService.post("/login", {
-            email: state.email,
-            password: state.password,
-        });
-        if (res.status === 200) {
+    const handleLogin = async (userInfo) => {
+        try {
+            const res = await AxiosService.post("/login", {
+                email: userInfo.email,
+                password: userInfo.password,
+            });
             let accessToken = res.data.access_token;
             dispatch(actions.actUserLogin(accessToken));
             dispatch(actions.hideModal());
+        } catch (error) {
+            console.log(error);
+            setState({ alert: error.response.data.message });
         }
     };
 
@@ -35,53 +53,60 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmitLoginForm}>
+        <form onSubmit={formik.handleSubmit}>
             <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">
-                    Email address
-                </label>
+                <label htmlFor="email">Email Address</label>
                 <input
-                    type="email"
+                    id="email"
+                    name="email"
+                    type="text"
                     class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    value={state.email}
-                    onChange={(e) =>
-                        setState({ ...state, email: e.target.value })
-                    }
+                    onChange={(e) => {
+                        formik.handleChange(e);
+                        setState({ alert: "" });
+                    }}
+                    value={formik.values.email}
                 />
-                <div id="emailHelp" class="form-text">
-                    We'll never share your email with anyone else.
-                </div>
+                {formik.errors.email ? (
+                    <div className="error-message">{formik.errors.email}</div>
+                ) : null}
             </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">
-                    Password
-                </label>
+
+            <div className="mb-3">
+                <label htmlFor="password">Password</label>
                 <input
+                    id="password"
+                    name="password"
                     type="password"
                     class="form-control"
-                    id="exampleInputPassword1"
-                    value={state.password}
-                    onChange={(e) =>
-                        setState({ ...state, password: e.target.value })
-                    }
+                    onChange={(e) => {
+                        formik.handleChange(e);
+                        setState({ alert: "" });
+                    }}
+                    value={formik.values.password}
                 />
+                {formik.errors.password ? (
+                    <div className="error-message">
+                        {formik.errors.password}
+                    </div>
+                ) : null}
             </div>
+
             {state.alert ? (
                 <div class="alert alert-danger" role="alert">
-                    A simple danger alert—check it out!
+                    {state.alert}
                 </div>
             ) : null}
+
             <div className="button-group">
-                <button type="submit" class="btn btn-primary btn-signIn">
-                    LOG IN
+                <button className="btn btn-primary btn-signIn" type="submit ">
+                    Login
                 </button>
                 <button
-                    class="btn btn-primary btn-register"
+                    className="btn btn-primary btn-register"
                     onClick={handleShowRegister}
                 >
-                    REGISTER
+                    Register
                 </button>
             </div>
         </form>

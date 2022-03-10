@@ -17,19 +17,28 @@ class AuthController extends Controller
                 'password' => 'required'
             ]);
 
-            $credentials = request(['email', 'password']);
+            // $credentials = request(['email', 'password']);
 
-            if (!Auth::attempt($credentials)) {
-                return response()->json([
-                    'status_code' => 500,
-                    'message' => 'Unauthorized'
-                ]);
-            }
+            // if (!Auth::attempt($credentials)) {
+            //     return response()->json([
+            //         'status_code' => 500,
+            //         'message' => 'Unauthorized'
+            //     ], 500);
+            // }
 
             $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return response()->json([
+                    'status_code' => 500,
+                    'message' => 'Email doest not exist'
+                ], 500);
+            }
 
             if (!Hash::check($request->password, $user->password, [])) {
-                throw new \Exception('Error in Login');
+                return response()->json([
+                    'status_code' => 500,
+                    'message' => 'Wrong password'
+                ], 500);
             }
 
             $tokenResult = $user->createToken('authToken')->plainTextToken;
