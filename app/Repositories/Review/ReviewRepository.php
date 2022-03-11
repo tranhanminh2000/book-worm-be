@@ -8,6 +8,8 @@ class ReviewRepository
 {
     public function selectByCondition($sort, $filter, $bookId)
     {
+
+
         $sortBy = null;
         $sortValue = null;
         $filterBy = null;

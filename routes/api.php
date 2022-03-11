@@ -8,6 +8,8 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\OrderController;
+use App\Models\Book;
+use App\Repositories\Book\BookRepository;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -50,4 +52,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::post('v1/logout', [AuthController::class, "logout"]);
     Route::post("v1/orders", [OrderController::class, "store"]);
+});
+
+Route::get("v1/test", function (Request $request) {
+    $query = Book::select();
+
+    if ($request->has('filter')) {
+        $filter = $request->query('filter');
+        if ($filter["book_price"]) {
+            $query->where("book_price", 67.23);
+        }
+        if ($filter["book_cover_photo"]) {
+            $query->where("book_cover_photo", "book3");
+        }
+
+        return $query->get();
+    };
+
+    // return $request->input('filter');
 });

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Book;
 use App\Repositories\Book\BookRepository;
 use App\Support\Collection;
 use Illuminate\Http\Request;
@@ -25,10 +25,8 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $size  = $request->query("size");
-        $sort   = $request->query("sort");
-        $filter = $request->query("filter");
 
-        $books = $this->bookRepository->selectByCondition($sort, $filter)->get()->unique();
+        $books = $this->bookRepository->selectByCondition($request)->get()->unique();
 
         $result = (new Collection($books))->paginate($size);
 
@@ -106,7 +104,7 @@ class BookController extends Controller
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByMostDiscount()->get();
+        $books = Book::sortByOnsale()->get();
 
         return $books->unique()->take($size);
     }
@@ -115,7 +113,7 @@ class BookController extends Controller
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByRecommended()->get();
+        $books = Book::sortByRecommend()->get();
 
         return $books->unique()->take($size);
     }
@@ -124,7 +122,7 @@ class BookController extends Controller
     {
         $size = $request->query('size');
 
-        $books = $this->bookRepository->selectByPopular()->get();
+        $books = Book::sortByPopular()->get();
 
         return $books->unique()->take($size);
     }
