@@ -40,6 +40,7 @@
         "react-checkmark": "^1.4.0",
         "react-cssfx-loading": "^1.1.0",
         "react-loading-skeleton": "^3.0.3",
+        "styled-components": "^5.3.3",
         "yup": "^0.32.11"
     }
 }

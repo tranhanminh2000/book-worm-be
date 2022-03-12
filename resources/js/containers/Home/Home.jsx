@@ -48,7 +48,7 @@ const Home = () => {
         const sort = {
             title: "Sort By : on sale",
             by: "type",
-            value: "onsale",
+            value: "onSale",
         };
         dispatch({ type: types.SET_SORT, payLoad: { sort: sort } });
         dispatch({ type: types.SET_PAGE, payLoad: { page: 1 } });

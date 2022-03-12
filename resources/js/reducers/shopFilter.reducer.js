@@ -4,8 +4,6 @@ const initialState = {
     categoryList: [],
     authorList: [],
     ratingList: [],
-    filter: null,
-    loading: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,9 +22,7 @@ const reducer = (state = initialState, action) => {
             };
         case types.GET_FILTER_LIST_FAILED:
             return { ...state, loading: false };
-        case types.SET_FILTER:
-            const { title, by, value } = action.payLoad.filter;
-            return { ...state, filter: { title: title, by: by, value: value } };
+
         default:
             return state;
     }

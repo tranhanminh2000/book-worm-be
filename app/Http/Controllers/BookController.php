@@ -104,7 +104,7 @@ class BookController extends Controller
     {
         $size = $request->query('size');
 
-        $books = Book::sortByOnsale()->get();
+        $books = Book::sortByOnSale()->get();
 
         return $books->unique()->take($size);
     }

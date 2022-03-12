@@ -46,6 +46,7 @@ class Book extends Model
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', "author_name")
             ->orderBy("most_discount", 'desc')
             ->orderBy("discount_price", 'asc');
 
@@ -98,9 +99,9 @@ class Book extends Model
         return $result;
     }
 
-    public function scopeSortByOrder(String $orderBy)
+    public function scopeSortByOrder($query, $orderBy)
     {
-        $result = Book::select(
+        $query = Book::select(
             'book.id',
             'book_title',
             'book_summary',
@@ -113,27 +114,25 @@ class Book extends Model
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
             ->orderBy("discount_price", $orderBy)
             ->orderBy("book_price", $orderBy);
 
-
-        return $result;
+        return $query;
     }
 
     public function scopeFilter($query, $request)
     {
         if ($request->has("filter")) {
             $filter = $request->get("filter");
-            if (isset($filter["author"])) {
-                $query->where("author_name", $filter["author"]);
+            if (isset($filter["authorName"])) {
+                $query->where("author_name", $filter["authorName"]);
             }
-            if (isset($filter["category"])) {
-                $query->where("category_name", $filter["category"]);
+            if (isset($filter["categoryName"])) {
+                $query->where("category_name", $filter["categoryName"]);
             }
-            if (isset($filter["rating"])) {
-                $query->selectRaw("AVG(rating_star) as avg_star")
-
-                    ->having("AVG(rating_star)", ">", $filter["rating"]);
+            if (isset($filter["ratingStar"])) {
+                $query->havingRaw("AVG(review.rating_star) > " . $filter["ratingStar"]);
             }
         }
 

@@ -16,12 +16,11 @@ class BookRepository
 
     public function selectByCondition($request)
     {
-        $query = null;
         if ($request->has("sort")) {
             $sort = $request->get("sort");
 
-            if ($sort['type'] == "onsale") {
-                $query = Book::sortByOnsale()->filter($request);
+            if ($sort['type'] == "onSale") {
+                $query = Book::sortByOnSale()->filter($request);
             }
             if ($sort['type'] == "recommend") {
                 $query = Book::sortByRecommend()->filter($request);
@@ -30,10 +29,10 @@ class BookRepository
                 $query = Book::sortByPopular()->filter($request);
             }
             if ($sort['type'] == "desc") {
-                $query = Book::sortByOrder("desc")->filter($request);
+                $query = Book::sortByOrder('desc')->filter($request);
             }
             if ($sort['type'] == "asc") {
-                $query = Book::sortByOrder("asc")->filter($request);
+                $query = Book::sortByOrder('asc')->filter($request);
             }
         }
 

@@ -4,10 +4,15 @@ import AxiosService from "../services/AxiosService";
 const generateUriFromCondition = (condition) => {
     const size = `size=${condition.size}`;
     const sort = `sort[${condition.sort.by}]=${condition.sort.value}`;
-    const filter =
-        condition.filter === null
-            ? ""
-            : `&filter[${condition.filter.by}]=${condition.filter.value}`;
+    let filter = "";
+    console.log(condition.filter);
+    for (const key in condition.filter) {
+        const object = condition.filter[key];
+        if (object) {
+            filter += `&filter[${object.by}]=${object.value}`;
+        }
+    }
+
     const page = `page=${condition.page}`;
 
     const uri = `/books?${size}&${sort}${filter}&${page}`;
@@ -27,7 +32,7 @@ export const actionGetFilterList = () => {
             authorList: authorList.data.data.authorsName,
             ratingList: ratingList,
         };
-
+        console.log(filterList);
         dispatch({
             type: types.GET_FILTER_LIST_SUCCESS,
             payLoad: { filterList: filterList },
@@ -40,7 +45,6 @@ export const actionGetBookList = (condition) => {
         dispatch({ type: types.GET_BOOK_LIST_REQUEST });
 
         let uri = generateUriFromCondition(condition);
-
         const res = await AxiosService.get(uri);
 
         if (res.status === 200) {

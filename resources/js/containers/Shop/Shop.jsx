@@ -1,26 +1,24 @@
 import React, { useEffect } from "react";
-import Layout from "../../component/Layout/Layout.jsx";
-import "./shop.scss";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-// import * as actions from "../../actions";
-import Cart from "../../component/Card/Card.jsx";
-import Pagination from "./../../component/Pagination/Pagination.jsx";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../actions";
-import Accordion from "./../../component/Accordian/Accorditon";
-import DropdownMenu from "./../../component/DropdownMenu/DropdownMenu";
-import * as types from "../../constants";
+import Accordion from "../../component/Accordian/Accordion";
+import Layout from "../../component/Layout/Layout.jsx";
+import NotFoundItem from "../../component/NotFoundItem/NotFoundItem";
 import ShopProductList from "../../component/ShopProductList/ShopProductList.jsx";
+import * as types from "../../constants";
 import delayAsync from "./../../common/delay";
+import DropdownMenu from "./../../component/DropdownMenu/DropdownMenu";
+import Pagination from "./../../component/Pagination/Pagination.jsx";
+import "./shop.scss";
 
 const sortList = [
-    { title: "Sort By : on sale", by: "type", value: "onsale" },
-    { title: "Sort By : popularity", by: "type", value: "popularity" },
+    { title: "Sort By : on sale", by: "type", value: "onSale" },
+    { title: "Sort By : popularity", by: "type", value: "popular" },
     { title: "Sort By : price high to low", by: "type", value: "desc" },
     { title: "Sort By : price low to high", by: "type", value: "asc" },
 ];
 
-const showList = [5, 10, 15, 20];
+const sizeList = [5, 10, 15, 20];
 
 const Shop = () => {
     const dispatch = useDispatch();
@@ -38,15 +36,16 @@ const Shop = () => {
         shopProduct.sort.value,
         shopProduct.size,
         shopProduct.page,
-        shopFilter.filter?.by,
-        shopFilter.filter?.value,
+        shopProduct.filter.author,
+        shopProduct.filter.category,
+        shopProduct.filter.rating,
     ]);
 
     const getBookLIst = () => {
         const condition = {
             size: shopProduct.size,
             sort: shopProduct.sort,
-            filter: shopFilter.filter,
+            filter: shopProduct.filter,
             page: shopProduct.page,
         };
         dispatch(actions.actionGetBookList(condition));
@@ -90,6 +89,11 @@ const Shop = () => {
         });
     };
 
+    const handleFilter = (title, filterBy, filterValue) => {
+        const filter = { title: title, by: filterBy, value: filterValue };
+        dispatch({ type: types.SET_FILTER, payLoad: { filter: filter } });
+    };
+
     return (
         <div className="shop">
             <Layout>
@@ -98,9 +102,20 @@ const Shop = () => {
                         <div className="wrapper">
                             <h4 className="title">
                                 Books
-                                {shopFilter.filter ? (
+                                {shopProduct.filter.author ||
+                                shopProduct.filter.category ||
+                                shopProduct.filter.rating ? (
                                     <span className="filter-title">
-                                        ( Filter by: {shopFilter.filter?.title}{" "}
+                                        ( Filter by:{" "}
+                                        {shopProduct.filter.author
+                                            ? `Author: ${shopProduct.filter.author.value}`
+                                            : null}{" "}
+                                        {shopProduct.filter.category
+                                            ? `Category: ${shopProduct.filter.category.value}`
+                                            : null}{" "}
+                                        {shopProduct.filter.rating
+                                            ? `Rating: ${shopProduct.filter.rating.value}`
+                                            : null}{" "}
                                         )
                                     </span>
                                 ) : null}
@@ -110,23 +125,28 @@ const Shop = () => {
                             <div className="col-12 col-sm-2 filterQuery filter-section">
                                 <h4 className="filter-heading">Filter By</h4>
                                 <Accordion
-                                    list={[
-                                        {
-                                            title: "Author",
-                                            field: "author_name",
-                                            data: shopFilter.authorList,
-                                        },
-                                        {
-                                            title: "Category",
-                                            field: "category_name",
-                                            data: shopFilter.categoryList,
-                                        },
-                                        {
-                                            title: "Rating",
-                                            field: "rating_star",
-                                            data: shopFilter.ratingList,
-                                        },
-                                    ]}
+                                    handleFilter={handleFilter}
+                                    content={{
+                                        title: "author",
+                                        field: "authorName",
+                                        list: shopFilter.authorList,
+                                    }}
+                                />
+                                <Accordion
+                                    handleFilter={handleFilter}
+                                    content={{
+                                        title: "category",
+                                        field: "categoryName",
+                                        list: shopFilter.categoryList,
+                                    }}
+                                />
+                                <Accordion
+                                    handleFilter={handleFilter}
+                                    content={{
+                                        title: "rating",
+                                        field: "ratingStar",
+                                        list: shopFilter.ratingList,
+                                    }}
                                 />
                             </div>
                             <div className="col-12 col-sm-10 books-section">
@@ -160,7 +180,7 @@ const Shop = () => {
                                                 class="dropdown-menu"
                                                 aria-labelledby="show"
                                             >
-                                                {showList.map((item) => {
+                                                {sizeList.map((item) => {
                                                     return (
                                                         <li>
                                                             <span

@@ -6,10 +6,12 @@ import * as actions from "../../actions";
 import DialogSuccess from "../../component/DialogSuccess/DialogSuccess.jsx";
 import Layout from "../../component/Layout/Layout.jsx";
 import LoginForm from "../../component/LoginForm/LoginForm";
+import NotFoundItem from "../../component/NotFoundItem/NotFoundItem";
 import * as types from "../../constants";
 import CardList from "./../../component/CartList/CartList.jsx";
 import Dialog from "./../../component/Dialog/Dialog.jsx";
 import "./cart.scss";
+import emptyCart from "../../../assets/emptyCart.png";
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
@@ -109,6 +111,7 @@ const Cart = () => {
                                 handleIncreaseQuantity={handleIncreaseQuantity}
                                 handleDecreaseQuantity={handleDecreaseQuantity}
                             />
+                            {cart.cartList.length === 0 ? <NotFoundItem img={"/emptyCart.png"}/> : null}
                         </div>
                         <div className="col-12 col-md-4">
                             <div className="total">
