@@ -22,6 +22,7 @@ export const actPostOrders = (orderDetail, navigate) => {
                     />
                 )
             );
+            dispatch({ type: types.RESET_CART });
             let navigateTimeout = setTimeout(() => {
                 navigate("/home");
                 dispatch(actions.hideModal());

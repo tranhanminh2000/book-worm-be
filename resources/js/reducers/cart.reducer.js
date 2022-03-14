@@ -131,6 +131,12 @@ const reducer = (state = initialState, action) => {
                 return { ...state };
             }
 
+        case types.RESET_CART:
+            localStorage.setItem(
+                "cart",
+                JSON.stringify({ cartNumber: 0, cartList: [] })
+            );
+            return { cartNumber: 0, cartList: [] };
         default:
             return state;
     }
