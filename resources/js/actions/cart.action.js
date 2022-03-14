@@ -40,7 +40,7 @@ export const actPostOrders = (orderDetail, navigate) => {
             dispatch(
                 actions.changeModalContent(
                     <DialogFailed
-                        message="Failed"
+                        message={`Failed: ${listItemNotAvailable.toString()} are not available`}
                         action={() => {
                             dispatch(actions.hideModal());
                         }}

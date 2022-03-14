@@ -15,24 +15,26 @@ const CardList = ({
         xhtml = list.map((listItem, index) => {
             return (
                 <tr>
-                    <td style={{ width: "50%" }}>
+                    <td>
                         <Link
                             to={`/detail/${listItem.id}`}
-                            className="product"
+                            className="wrapper-img"
                             title={listItem.title}
                         >
-                            <div className="wrapper-img">
-                                <img
-                                    src={
-                                        "/bookcover/" + listItem.photo + ".jpg"
-                                    }
-                                    alt=""
-                                />
-                            </div>
-                            <div className="product-info">
-                                <div className="title">{listItem.title}</div>
-                                <div className="author">{listItem.author}</div>
-                            </div>
+                            <img
+                                src={"/bookcover/" + listItem.photo + ".jpg"}
+                                alt=""
+                            />
+                        </Link>
+                    </td>
+                    <td>
+                        <Link
+                            to={`/detail/${listItem.id}`}
+                            className="product-info"
+                            title={listItem.title}
+                        >
+                            <div className="title">{listItem.title}</div>
+                            <div className="author">{listItem.author}</div>
                         </Link>
                     </td>
                     <td>
@@ -102,6 +104,7 @@ const CardList = ({
             <thead>
                 <tr>
                     <th scope="col ">Product</th>
+                    <th scope="col "></th>
                     <th scope="col ">Price</th>
                     <th scope="col ">Quantity</th>
                     <th scope="col ">Total</th>
