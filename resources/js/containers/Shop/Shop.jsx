@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../../actions";
 import Accordion from "../../component/Accordian/Accordion";
 import Layout from "../../component/Layout/Layout.jsx";
-import NotFoundItem from "../../component/NotFoundItem/NotFoundItem";
 import ShopProductList from "../../component/ShopProductList/ShopProductList.jsx";
 import * as types from "../../constants";
 import delayAsync from "./../../common/delay";
@@ -18,7 +17,7 @@ const sortList = [
     { title: "Sort By : price low to high", by: "type", value: "asc" },
 ];
 
-const sizeList = [5, 10, 15, 20];
+const sizeList = [5, 15, 20, 25];
 
 const Shop = () => {
     const dispatch = useDispatch();
@@ -152,9 +151,9 @@ const Shop = () => {
                             <div className="col-12 col-sm-10 books-section">
                                 <div className="utilities-bar">
                                     <p className="showing-title">
-                                        show {shopProduct.data?.from}-
-                                        {shopProduct.data?.to} of{" "}
-                                        {shopProduct.data?.total} books
+                                        Showing {shopProduct.data?.from}-
+                                        {shopProduct.data?.to} Of{" "}
+                                        {shopProduct.data?.total} Books
                                     </p>
                                     <div className="button-group">
                                         <div class="dropdown sort">
@@ -191,7 +190,7 @@ const Shop = () => {
                                                                     )
                                                                 }
                                                             >
-                                                                show: {item}
+                                                                Show: {item}
                                                             </span>
                                                         </li>
                                                     );
@@ -203,12 +202,16 @@ const Shop = () => {
                                 <ShopProductList
                                     productList={shopProduct.data?.data}
                                 />
-                                <div className="row pagination">
-                                    <Pagination
-                                        paginateList={shopProduct.data?.links}
-                                        handlePaginate={handlePaginate}
-                                    />
-                                </div>
+                                {shopProduct.data?.data.length > 0 ? (
+                                    <div className="row pagination">
+                                        <Pagination
+                                            paginateList={
+                                                shopProduct.data?.links
+                                            }
+                                            handlePaginate={handlePaginate}
+                                        />
+                                    </div>
+                                ) : null}
                             </div>
                         </div>
                     </div>

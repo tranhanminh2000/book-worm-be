@@ -33,12 +33,8 @@ Route::resource("v1/books", BookController::class);
 
 Route::resource("v1/reviews", ReviewController::class);
 
-// C
 Route::get("v1/categories", [CategoryController::class, 'getCategoriesName']);
-
-// A
 Route::get("v1/authors", [AuthorController::class, 'getAuthorsName']);
-
 
 Route::post("v1/reviews", [ReviewController::class, "store"]);
 
@@ -54,20 +50,3 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post("v1/orders", [OrderController::class, "store"]);
 });
 
-Route::get("v1/test", function (Request $request) {
-    $query = Book::select();
-
-    if ($request->has('filter')) {
-        $filter = $request->query('filter');
-        if ($filter["book_price"]) {
-            $query->where("book_price", 67.23);
-        }
-        if ($filter["book_cover_photo"]) {
-            $query->where("book_cover_photo", "book3");
-        }
-
-        return $query->get();
-    };
-
-    // return $request->input('filter');
-});

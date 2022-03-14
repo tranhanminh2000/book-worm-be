@@ -9,11 +9,8 @@ import * as Yup from "yup";
 
 const reviewSchema = Yup.object().shape({
     title: Yup.string()
-        .min(20, "Title Is Too Short!")
+        .max(120, "Title Is Not Over 120 Characters !")
         .required("Title is Required"),
-    detail: Yup.string()
-        .min(30, "Detail Is Too Short!")
-        .required("Detail is Required"),
 });
 
 // Component

@@ -9,11 +9,14 @@ import Pagination from "../Pagination/Pagination.jsx";
 import ReviewForm from "./../ReviewForm/ReviewForm";
 import Loading from "../Loading/Loading";
 import DropdownMenu from "./../DropdownMenu/DropdownMenu";
+import formatDate from "../../common/formatDate";
 
 const sortList = [
     { title: "Sort by: newest to oldest", by: "review_date", value: "desc" },
     { title: "Sort by: oldest to newest", by: "review_date", value: "asc" },
 ];
+
+const sizeList = [5, 15, 20, 25];
 
 function ReviewSection() {
     const { id } = useParams();
@@ -116,7 +119,7 @@ function ReviewSection() {
                         {listItem.review_details}
                     </p>
                     <div className="comment-review-time">
-                        {listItem.review_date}
+                        {formatDate(listItem.review_date)}
                     </div>
                 </li>
             );
@@ -129,6 +132,7 @@ function ReviewSection() {
             id: id,
             size: 5,
             sort: {
+                title: "Sort by: newest to oldest",
                 by: "review_date",
                 value: "desc",
             },
@@ -194,12 +198,15 @@ function ReviewSection() {
                                     class="dropdown-menu"
                                     aria-labelledby="show"
                                 >
-                                    <li onClick={() => handleSize(5)}>
-                                        <div class="dropdown-item">Show 5</div>
-                                    </li>
-                                    <li onClick={() => handleSize(10)}>
-                                        <div class="dropdown-item">Show 10</div>
-                                    </li>
+                                    {sizeList.map((ele) => {
+                                        return (
+                                            <li onClick={() => handleSize(ele)}>
+                                                <div class="dropdown-item">
+                                                    Show {ele}
+                                                </div>
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         </div>

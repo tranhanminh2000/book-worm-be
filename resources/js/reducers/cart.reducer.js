@@ -106,26 +106,31 @@ const reducer = (state = initialState, action) => {
         }
         case types.REMOVE_CART_ITEM:
             const id = action.payLoad.id;
-            const findItem = state.cartList.find((item) => item.id === id);
+            const itemFound = state.cartList.find((item) => item.id === id);
 
-            const cartFiltered = state.cartList.filter((item) => {
-                return item.id != findItem.id;
-            });
+            if (itemFound) {
+                const cartFiltered = state.cartList.filter((item) => {
+                    return item.id != itemFound.id;
+                });
 
-            localStorage.setItem(
-                "cart",
-                JSON.stringify({
+                localStorage.setItem(
+                    "cart",
+                    JSON.stringify({
+                        ...state,
+                        cartNumber: state.cartNumber - itemFound.quantity,
+                        cartList: cartFiltered,
+                    })
+                );
+
+                return {
                     ...state,
-                    cartNumber: state.cartNumber - findItem.quantity,
+                    cartNumber: state.cartNumber - itemFound.quantity,
                     cartList: cartFiltered,
-                })
-            );
+                };
+            } else {
+                return { ...state };
+            }
 
-            return {
-                ...state,
-                cartNumber: state.cartNumber - findItem.quantity,
-                cartList: cartFiltered,
-            };
         default:
             return state;
     }

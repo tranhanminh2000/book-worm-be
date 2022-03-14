@@ -1,25 +1,14 @@
 import React from "react";
-import "./dialog.scss";
-import { useDispatch } from "react-redux";
-import * as actions from "../../actions";
-import { Checkmark } from "react-checkmark";
+import "./dialogFailed.scss";
 
 function DialogFailed({ message, action }) {
-    const dispatch = useDispatch();
-
-    const hideModal = () => {
-        dispatch(actions.hideModal());
-    };
     return (
         <div className="dialogFailed">
-            <Checkmark />
+            <img src="/error.png" alt="" />
             <p className="message">{message}</p>
             <div className="buttonGroup">
                 <button className="btn primary btn-order" onClick={action}>
-                    Yes
-                </button>
-                <button className="btn primary btn-cancel" onClick={hideModal}>
-                    Cancel
+                    Continue
                 </button>
             </div>
         </div>

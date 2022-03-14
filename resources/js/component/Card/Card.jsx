@@ -11,6 +11,7 @@ function Card({ item }) {
             to={"/detail/" + item.id}
             className="card bwm-card"
             style={{ width: "100%" }}
+            title={item.book_title}
         >
             <div className="wrapper-img">
                 <img src={`/bookcover/${img}.jpg`} />
@@ -25,14 +26,14 @@ function Card({ item }) {
                         {item.discount_price ? (
                             <>
                                 <span className="current bwm-line-through">
-                                    {item.book_price}
+                                    {item.book_price}$
                                 </span>
                                 <span className="discount">
-                                    {item.discount_price}
+                                    {item.discount_price}$
                                 </span>
                             </>
                         ) : (
-                            <span className="current">{item.book_price}</span>
+                            <span className="current">{item.book_price}$</span>
                         )}
                     </div>
                 </div>

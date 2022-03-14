@@ -108,15 +108,19 @@ class Book extends Model
             'book_price',
             'book_cover_photo',
             'author_name',
-            "discount_price"
-        )
+            "discount_price",
+        )->selectRaw("CASE
+        WHEN discount_price IS NULL
+        THEN book_price
+        ELSE discount_price
+        END as final_price
+        ")
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
             ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
-            ->orderBy("discount_price", $orderBy)
-            ->orderBy("book_price", $orderBy);
+            ->orderBy("final_price", $orderBy);
 
         return $query;
     }

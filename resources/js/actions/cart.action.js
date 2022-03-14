@@ -1,14 +1,13 @@
-import DialogSuccess from "../component/DialogSuccess/DialogSuccess";
-import * as types from "../constants";
-import AxiosService from "../services/AxiosService";
 import * as actions from "../actions";
-import delayAsync from "../common/delay";
+import * as types from "../constants";
+import DialogSuccess from "../component/DialogSuccess/DialogSuccess";
+import AxiosService from "../services/AxiosService";
+import DialogFailed from "./../component/DialogFailed/DialogFailed";
 
 export const actPostOrders = (orderDetail, navigate) => {
     return async (dispatch) => {
-        const res = await AxiosService.post("/orders", orderDetail);
-
-        if (res.status === 200) {
+        try {
+            await AxiosService.post("/orders", orderDetail);
             dispatch(actions.showModal());
             dispatch(actions.changeModalTitle("Status Order"));
             dispatch(
@@ -27,6 +26,27 @@ export const actPostOrders = (orderDetail, navigate) => {
                 navigate("/home");
                 dispatch(actions.hideModal());
             }, 10000);
+        } catch (error) {
+            const listItemNotAvailable = error.response.data.data;
+            listItemNotAvailable.forEach((itemId) => {
+                dispatch({
+                    type: types.REMOVE_CART_ITEM,
+                    payLoad: { id: itemId },
+                });
+            });
+
+            dispatch(actions.showModal());
+            dispatch(actions.changeModalTitle("Status Order"));
+            dispatch(
+                actions.changeModalContent(
+                    <DialogFailed
+                        message="Failed"
+                        action={() => {
+                            dispatch(actions.hideModal());
+                        }}
+                    />
+                )
+            );
         }
     };
 };

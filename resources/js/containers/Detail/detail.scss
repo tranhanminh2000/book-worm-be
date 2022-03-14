@@ -6,9 +6,11 @@
             padding: 10px 0 10px;
         }
         .section-book-detail {
+            position: relative;
             .row {
                 .col-12.col-sm-8 {
                     .content-detail {
+                        background: white;
                         padding: 20px;
                         box-shadow: $box-shadow;
                         border-radius: $border-radius;
@@ -115,6 +117,5 @@
                 }
             }
         }
-
     }
 }

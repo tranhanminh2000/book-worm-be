@@ -36,8 +36,11 @@
                         justify-content: space-between;
                         background: white;
                         border-radius: $border-radius;
-                        padding: 10px;
+                        padding: 10px 0 10px;
+                        align-items: center;
                         p {
+                            line-height: 100%;
+                            margin: 0;
                         }
                         .button-group {
                             display: flex;

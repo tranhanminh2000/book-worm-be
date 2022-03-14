@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
                 author: author.author_name,
                 category: category.category_name,
             };
-            return { ...state, ...bookDetail };
+            return { ...state, ...bookDetail, loading: false };
         case types.GET_BOOK_DETAIL_FAILED:
             return { ...state, loading: false };
 

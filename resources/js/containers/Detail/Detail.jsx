@@ -9,12 +9,16 @@ import classNames from "classnames";
 import ReviewSection from "../../component/ReviewSection/ReviewSection.jsx";
 import Skeleton from "react-loading-skeleton";
 import delayAsync from "./../../common/delay";
+import Loading from "../../component/Loading/Loading.jsx";
 
 const Detail = () => {
     let { id } = useParams();
 
-    const [alert, setAlert] = useState("");
-
+    const [alert, setAlert] = useState({
+        type: "",
+        message: "",
+    });
+    console.log(alert);
     const dispatch = useDispatch();
 
     const detail = useSelector((state) => state.detail);
@@ -26,7 +30,7 @@ const Detail = () => {
 
     const handleAddToCart = async () => {
         let item = {
-            id: id,
+            id: detail.id,
             title: detail.title,
             author: detail.author,
             price: detail.price,
@@ -35,28 +39,46 @@ const Detail = () => {
             quantity: detail.quantity,
         };
 
+        if (!item.title && !item.author) {
+            return;
+        }
+
         let itemExist = cart.cartList.find(
             (cartItem) => cartItem.id === item.id
         );
 
         if (itemExist) {
             if (itemExist.quantity + item.quantity > 8) {
-                setAlert(
-                    "Total quantity of this book in cart is not allowed over 8 "
-                );
-                await delayAsync(5000);
-                setAlert("");
+                setAlert({
+                    type: "error",
+                    message:
+                        "Total quantity of this book in cart is not allowed over 8 ",
+                });
+                await delayAsync(3000);
+                setAlert({ type: "", message: "" });
             } else {
                 dispatch({
                     type: types.ADD_CART_ITEM_SUCCESS,
                     payLoad: { cartItem: item },
                 });
+                setAlert({
+                    type: "success",
+                    message: "Add item to cart successfully",
+                });
+                await delayAsync(3000);
+                setAlert({ type: "", message: "" });
             }
         } else {
             dispatch({
                 type: types.ADD_CART_ITEM_SUCCESS,
                 payLoad: { cartItem: item },
             });
+            setAlert({
+                type: "success",
+                message: "Add item to cart successfully",
+            });
+            await delayAsync(3000);
+            setAlert({ type: "", message: "" });
         }
     };
 
@@ -80,6 +102,7 @@ const Detail = () => {
                 <div className="container">
                     <h1 className="title">{detail.category}</h1>
                     <div className="section-book-detail">
+                        {detail.loading ? <Loading /> : null}
                         <div className="row">
                             <div className="col-12 col-sm-8">
                                 <div className="content-detail">
@@ -177,13 +200,19 @@ const Detail = () => {
                                                 +
                                             </span>
                                         </div>
-                                        {alert ? (
+                                        {alert.type && alert.message ? (
                                             <div
-                                                class="alert alert-danger"
+                                                class={classNames("alert", {
+                                                    "alert-danger":
+                                                        alert.type === "error",
+                                                    "alert-success":
+                                                        alert.type ===
+                                                        "success",
+                                                })}
                                                 role="alert"
-                                                style={{marginTop: "20px"}}
+                                                style={{ marginTop: "20px" }}
                                             >
-                                                {alert}
+                                                {alert.message}
                                             </div>
                                         ) : null}
                                         <button

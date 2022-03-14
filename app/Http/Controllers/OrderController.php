@@ -52,19 +52,7 @@ class OrderController extends Controller
         $orderAmount = $request->orderAmount;
         $cart = $request->cart;
 
-        $result = $this->orderRepository->createOrder($userId, $orderAmount, $cart);
-
-        if($result == 1){
-            return response()->json([
-                "success" => true,
-                "message" => "Order successfully"
-            ], 200);
-        } else {
-            return response()->json([
-                "success" => false,
-                "message" => "Order failed"
-            ], 400);
-        }
+        return $this->orderRepository->createOrder($userId, $orderAmount, $cart);
     }
 
     /**

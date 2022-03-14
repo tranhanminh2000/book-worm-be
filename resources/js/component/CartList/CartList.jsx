@@ -16,7 +16,11 @@ const CardList = ({
             return (
                 <tr>
                     <td style={{ width: "50%" }}>
-                        <Link to={`/detail/${listItem.id}`} className="product">
+                        <Link
+                            to={`/detail/${listItem.id}`}
+                            className="product"
+                            title={listItem.title}
+                        >
                             <div className="wrapper-img">
                                 <img
                                     src={
@@ -35,14 +39,14 @@ const CardList = ({
                         {listItem.price && listItem.discountPrice ? (
                             <>
                                 <div className="discount">
-                                    ${listItem.discountPrice}
+                                    {listItem.discountPrice}$
                                 </div>
                                 <div className="price bwm-line-through">
-                                    ${listItem.price}
+                                    {listItem.price}$
                                 </div>
                             </>
                         ) : (
-                            <div className="price">$99</div>
+                            <div>{listItem.price}$</div>
                         )}
                     </td>
                     <td>
@@ -75,6 +79,7 @@ const CardList = ({
                                       listItem.quantity *
                                       parseFloat(listItem.price)
                                   ).toFixed(2)}
+                            $
                         </div>
                     </td>
                     <td>

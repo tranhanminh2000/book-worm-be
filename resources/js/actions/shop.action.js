@@ -5,7 +5,6 @@ const generateUriFromCondition = (condition) => {
     const size = `size=${condition.size}`;
     const sort = `sort[${condition.sort.by}]=${condition.sort.value}`;
     let filter = "";
-    console.log(condition.filter);
     for (const key in condition.filter) {
         const object = condition.filter[key];
         if (object) {
@@ -32,7 +31,6 @@ export const actionGetFilterList = () => {
             authorList: authorList.data.data.authorsName,
             ratingList: ratingList,
         };
-        console.log(filterList);
         dispatch({
             type: types.GET_FILTER_LIST_SUCCESS,
             payLoad: { filterList: filterList },

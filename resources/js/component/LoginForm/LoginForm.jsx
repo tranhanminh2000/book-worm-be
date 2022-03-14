@@ -41,7 +41,6 @@ const LoginForm = () => {
             dispatch(actions.actUserLogin(accessToken));
             dispatch(actions.hideModal());
         } catch (error) {
-            console.log(error);
             setState({ alert: error.response.data.message });
         }
     };

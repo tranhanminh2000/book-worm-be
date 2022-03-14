@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Order;
 
+use App\Models\Book;
 use App\Models\Order;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 
@@ -14,7 +16,7 @@ class OrderRepository
         DB::beginTransaction();
 
         try {
-            $idOrder = Order::insertGetId(
+            $idOrder = DB::table("order")->insertGetId(
                 [
                     'user_id' => $userId,
                     'order_date' => date_format(date_create(), 'Y-m-d H:i:s'),
@@ -22,7 +24,7 @@ class OrderRepository
                 ]
             );
 
-            $cartMapped = collect($cart)->map(function ($value) use($idOrder){
+            $cartMapped = collect($cart)->map(function ($value) use ($idOrder) {
                 return [
                     "order_id" => $idOrder,
                     "book_id" => $value["bookId"],
@@ -31,14 +33,31 @@ class OrderRepository
                 ];
             })->all();
 
-            DB::table("order_item")->insert($cartMapped);
-            DB::commit();
+            $unavailableItems = [];
+            foreach ($cartMapped as  $item) {
+                if (!Book::where("id", "=", $item['book_id'])->exists()) {
+                    $unavailableItems[] = $item['book_id'];
+                }
+            }
 
-            return 1;
+            if (count($unavailableItems)) {
+                throw new Exception("error", 1);
+            } else {
+                DB::table("order_item")->insert($cartMapped);
+                DB::commit();
+                return response()->json([
+                    "success" => true,
+                    "message" => "Order successfully"
+                ], 200);;
+            }
         } catch (\Exception $e) {
             DB::rollback();
-            //throw $th;
-            return 0;
+
+            return response()->json([
+                "success" => false,
+                "message" => "Order failed",
+                "data" => $unavailableItems
+            ], 400);
         }
     }
 }

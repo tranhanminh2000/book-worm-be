@@ -70,7 +70,6 @@ class ReviewController extends Controller
         $validator = Validator::make($request->all(), [
             'bookId' => 'required',
             'reviewTitle' => 'required',
-            'reviewDetails' => 'required',
             'ratingStar' => 'required',
         ]);
 

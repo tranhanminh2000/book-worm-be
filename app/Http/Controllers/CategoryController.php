@@ -9,11 +9,8 @@ class CategoryController extends Controller
 {
     public function getCategoriesName()
     {
-        $categoriesName = Category::select("category_name")->get();
+        $categoriesName = Category::select("category_name")->orderBy("category_name")->get();
 
-        // $categoriesName->map(function ($value) {
-        //     return $value["category_name"];
-        // });
         $result = $categoriesName->map(function ($value) {
             return $value["category_name"];
         })->all();

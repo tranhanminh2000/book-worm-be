@@ -79,7 +79,7 @@ const Home = () => {
                         <h2 className="title">Feature Books</h2>
                         <div className="options">
                             <button
-                                className={classNames("btn recommended", {
+                                className={classNames("btn recommend", {
                                     active: feature.type === "recommended",
                                 })}
                                 onClick={getListRecommended}

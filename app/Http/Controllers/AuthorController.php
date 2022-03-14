@@ -9,7 +9,7 @@ class AuthorController extends Controller
 {
     public function getAuthorsName()
     {
-        $authorsName = Author::select("author_name")->get();
+        $authorsName = Author::select("author_name")->orderBy("author_name")->get();
 
         $result = $authorsName->map(function ($value) {
             return $value["author_name"];
