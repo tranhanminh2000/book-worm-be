@@ -18,7 +18,6 @@ const Detail = () => {
         type: "",
         message: "",
     });
-    console.log(alert);
     const dispatch = useDispatch();
 
     const detail = useSelector((state) => state.detail);

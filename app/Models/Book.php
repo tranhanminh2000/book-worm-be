@@ -136,7 +136,7 @@ class Book extends Model
                 $query->where("category_name", $filter["categoryName"]);
             }
             if (isset($filter["ratingStar"])) {
-                $query->havingRaw("AVG(review.rating_star) > " . $filter["ratingStar"]);
+                $query->havingRaw("AVG(review.rating_star) >= " . $filter["ratingStar"]);
             }
         }
 
