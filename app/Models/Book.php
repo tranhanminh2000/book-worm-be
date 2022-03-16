@@ -39,64 +39,85 @@ class Book extends Model
         $this->hasMany(Order_items::class);
     }
 
-    public function scopeSortByOnSale()
+    public function scopeSortByOnSale($query)
     {
-        $result = Book::select('book.id', 'book_title', 'book_summary', 'book_price', 'book_cover_photo', 'author_name', "discount_price", DB::raw("book_price - discount_price AS  most_discount"))
+        $query = Book::select('book.id', 'book_title', 'book_summary', 'book_price', 'book_cover_photo', 'author_name', DB::raw('CASE
+        WHEN
+        (CAST(NOW() AS DATE) BETWEEN discount.discount_start_date AND discount.discount_end_date)
+          OR
+        ((CAST(NOW() AS DATE) >= discount.discount_start_date) AND discount.discount_end_date ISNULL)
+        THEN discount.discount_price
+        ELSE null
+        END AS discount_price'), DB::raw("book_price - discount_price AS  most_discount"))
             ->join("discount", "discount.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
-            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', "author_name")
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', "author_name", 'discount.discount_start_date', 'discount.discount_end_date')
             ->orderBy("most_discount", 'desc')
             ->orderBy("discount_price", 'asc');
 
-        return $result;
+        return $query;
     }
 
-    public function scopeSortByRecommend()
+    public function scopeSortByRecommend($query)
     {
-        $result = Book::select(
+        $query = Book::select(
             'book.id',
             'book_title',
             'book_summary',
             'book_price',
             'book_cover_photo',
             'author_name',
-            'discount_price',
+            DB::raw('CASE
+            WHEN
+            (CAST(NOW() AS DATE) BETWEEN discount.discount_start_date AND discount.discount_end_date)
+              OR
+            ((CAST(NOW() AS DATE) >= discount.discount_start_date) AND discount.discount_end_date ISNULL)
+            THEN discount.discount_price
+            ELSE null
+            END AS discount_price'),
             DB::raw('AVG(review.rating_star) as avg_rating')
         )
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
-            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name', 'discount.discount_start_date', 'discount.discount_end_date')
             ->orderBy("avg_rating", 'DESC')
             ->orderBy("discount_price", 'ASC')
             ->orderBy("book_price", 'ASC');
-        return $result;
+        return $query;
     }
 
-    public function scopeSortByPopular()
+    public function scopeSortByPopular($query)
     {
-        $result = Book::select(
+        $query = Book::select(
             'book.id',
             'book_title',
             'book_summary',
             'book_price',
             'book_cover_photo',
             'author_name',
-            'discount_price',
+            DB::raw('CASE
+            WHEN
+            (CAST(NOW() AS DATE) BETWEEN discount.discount_start_date AND discount.discount_end_date)
+              OR
+            ((CAST(NOW() AS DATE) >= discount.discount_start_date) AND discount.discount_end_date ISNULL)
+            THEN discount.discount_price
+            ELSE null
+            END AS discount_price'),
             DB::raw('COUNT(review.id) as total_review')
         )
             ->leftJoin("discount", "discount.book_id", '=', 'book.id')
             ->join("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
-            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name', 'discount.discount_start_date', 'discount.discount_end_date')
             ->orderBy("total_review", 'DESC')
             ->orderBy("discount_price", 'ASC')
             ->orderBy("book_price", 'ASC');
 
-        return $result;
+        return $query;
     }
 
     public function scopeSortByOrder($query, $orderBy)
@@ -108,7 +129,14 @@ class Book extends Model
             'book_price',
             'book_cover_photo',
             'author_name',
-            "discount_price",
+            DB::raw('CASE
+            WHEN
+            (CAST(NOW() AS DATE) BETWEEN discount.discount_start_date AND discount.discount_end_date)
+              OR
+            ((CAST(NOW() AS DATE) >= discount.discount_start_date) AND discount.discount_end_date ISNULL)
+            THEN discount.discount_price
+            ELSE null
+            END AS discount_price'),
         )->selectRaw("CASE
         WHEN discount_price IS NULL
         THEN book_price
@@ -119,7 +147,7 @@ class Book extends Model
             ->leftJoin("review", "review.book_id", '=', 'book.id')
             ->leftJoin("author", "author.id", '=', 'book.author_id')
             ->leftJoin("category", "category.id", '=', 'book.category_id')
-            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name')
+            ->groupBy("book.id", "book_title", 'book_summary', 'book_price', "discount_price", 'book_cover_photo', 'author_name', 'discount.discount_start_date', 'discount.discount_end_date')
             ->orderBy("final_price", $orderBy);
 
         return $query;

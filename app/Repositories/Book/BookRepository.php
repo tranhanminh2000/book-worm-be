@@ -39,22 +39,6 @@ class BookRepository
         return $query;
     }
 
-    public function selectByMostDiscount()
-    {
-    }
-
-    public function selectByPopular()
-    {
-    }
-
-    public function selectByRecommended()
-    {
-    }
-
-    public function selectByOrder(string $orderBy)
-    {
-    }
-
     public function update($id)
     {
         //
